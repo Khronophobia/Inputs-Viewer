@@ -18,6 +18,7 @@ SettingsLayer* SettingsLayer::create() {
 }
 
 bool SettingsLayer::setup() {
+    this->setTitle("Inputs Viewer Config");
     this->setColor({127, 127, 127});
     this->setOpacity(255);
     m_noElasticity = true;
@@ -34,10 +35,10 @@ bool SettingsLayer::setup() {
     this->insertBefore(m_inputsLayer, m_mainLayer);
 
     m_p1Slider = TransformSlider::create(IVManager::get().m_p1Transform, m_inputsLayer->m_p1InputNode, "P1 Input");
-    m_mainLayer->addChildAtPosition(m_p1Slider, Anchor::Center, ccp(-80.f, 30.f));
+    m_mainLayer->addChildAtPosition(m_p1Slider, Anchor::Center, ccp(-80.f, 20.f));
 
     m_p2Slider = TransformSlider::create(IVManager::get().m_p2Transform, m_inputsLayer->m_p2InputNode, "P2 Input");
-    m_mainLayer->addChildAtPosition(m_p2Slider, Anchor::Center, ccp(80.f, 30.f));
+    m_mainLayer->addChildAtPosition(m_p2Slider, Anchor::Center, ccp(80.f, 20.f));
 
     this->createCheckbox(IVManager::get().m_showTotalInputs, "Show Total Inputs", SettingEventType::TotalInputsCounter, Anchor::Center, ccp(-70.f, -70.f));
 

@@ -37,8 +37,6 @@ bool InputSprite::init(InputType input) {
     }
 
     m_totalInputsText = CCLabelBMFont::create("0", "chatFont.fnt");
-    m_totalInputsText->setScale(0.5f);
-    m_totalInputsText->setVisible(false);
     this->addChildAtPosition(m_totalInputsText, Anchor::Bottom, ccp(0.f, 6.f));
 
     this->press(false, false);
@@ -68,12 +66,13 @@ void InputSprite::updateInputDisplay() {
     if (!IVManager::get().m_showTotalInputs) return;
 
     m_totalInputsText->setString(std::to_string(m_totalInputs).c_str());
+    m_totalInputsText->limitLabelWidth(16.f, 0.5f, 0.1f);
 }
 
 void InputSprite::setShowTotalInputs(bool show) {
     if (show) {
         m_totalInputsText->setVisible(true);
-        m_totalInputsText->setString(std::to_string(m_totalInputs).c_str());
+        this->updateInputDisplay();
         static_cast<AnchorLayoutOptions*>(m_inputSymbol->getLayoutOptions())
             ->setOffset(ccp(0.f, -7.5f));
         this->setContentHeight(constants::buttonHeightTall);

@@ -21,9 +21,9 @@ InputsViewLayer* InputsViewLayer::create() {
 bool InputsViewLayer::init() {
     if (!CCLayer::init()) return false;
 
-    m_p1InputNode = PlayerInputNode::create();
+    m_p1InputNode = PlayerInputNode::create("P1");
     this->addChild(m_p1InputNode);
-    m_p2InputNode = PlayerInputNode::create();
+    m_p2InputNode = PlayerInputNode::create("P2");
     this->addChild(m_p2InputNode);
 
     this->refreshDisplay();

@@ -1,3 +1,3 @@
 # Inputs Display
 
-Shows input during gameplay.
+Shows input during gameplay. Configure in the pause menu.

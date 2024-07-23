@@ -1,0 +1,55 @@
+{
+	"geode": "3.3.0",
+	"gd": {
+		"win": "2.206",
+		"mac": "2.206"
+	},
+	"id": "khronophobia.inputs_viewer",
+	"name": "Inputs Viewer",
+	"version": "v1.0.0",
+	"developer": "Khronophobia",
+	"description": "",
+	"resources": {
+		"sprites": [
+			"resources/*.png"
+		]
+	},
+	"dependencies": [
+		{
+			"id": "geode.node-ids",
+			"version": ">=1.12.0"
+		}
+	],
+	"settings": {
+		"background-press-color": {
+			"name": "Background Press Color",
+			"type": "rgba",
+			"default": [255, 255, 255, 255]
+		},
+		"background-release-color": {
+			"name": "Background Release Color",
+			"type": "rgba",
+			"default": [0, 0, 0, 127]
+		},
+		"outline-press-color": {
+			"name": "Outline Press Color",
+			"type": "rgba",
+			"default": [255, 255, 255, 255]
+		},
+		"outline-release-color": {
+			"name": "Outline Release Color",
+			"type": "rgba",
+			"default": [255, 255, 255, 255]
+		},
+		"text-press-color": {
+			"name": "Text Press Color",
+			"type": "rgba",
+			"default": [0, 0, 0, 255]
+		},
+		"text-release-color": {
+			"name": "Text Release Color",
+			"type": "rgba",
+			"default": [255, 255, 255, 255]
+		}
+	}
+}

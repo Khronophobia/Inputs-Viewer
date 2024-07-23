@@ -19,6 +19,7 @@ protected:
 class IVSettingFilter : public geode::EventFilter<IVSettingEvent> {
 public:
     IVSettingFilter();
+    IVSettingFilter(std::nullopt_t);
     IVSettingFilter(SettingEventType type);
 public:
     using Callback = void(SettingEventType);

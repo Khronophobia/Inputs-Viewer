@@ -14,6 +14,8 @@ SettingEventType IVSettingEvent::getType() const noexcept {
 IVSettingFilter::IVSettingFilter()
     : m_type() {}
 
+IVSettingFilter::IVSettingFilter(std::nullopt_t) : IVSettingFilter() {}
+
 IVSettingFilter::IVSettingFilter(SettingEventType type)
     : m_type(type) {}
 

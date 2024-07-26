@@ -13,6 +13,7 @@ add_library(${PROJECT_NAME} SHARED
     src/json/NodeTransform.cpp
     src/class/IVManager.cpp
     src/class/IVBackgroundSprite.cpp
+    src/class/IVBackgroundSpriteColored.cpp
     src/class/IVInputSprite.cpp
     src/class/IVPlayerInputNode.cpp
     src/class/IVSettingsLayer.cpp

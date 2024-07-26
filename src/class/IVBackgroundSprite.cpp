@@ -24,11 +24,19 @@ bool BackgroundSprite::init() {
     this->addChild(m_outline);
 
     this->setContentSize(m_outline->getContentSize());
-    this->setLayout(CopySizeLayout::create()
+    this->setLayout(
+        CopySizeLayout::create()
             ->add(m_fill)
-            ->add(m_outline)
+            ->add(m_outline),
+        false
     );
+    m_shouldUpdateLayout = true;
     return true;
+}
+
+void BackgroundSprite::setContentSize(CCSize const& size) {
+    CCNodeRGBA::setContentSize(size);
+    m_shouldUpdateLayout = true;
 }
 
 void BackgroundSprite::setColor(ccColor3B const& color) {
@@ -45,6 +53,14 @@ void BackgroundSprite::setOutlineColor(ccColor3B const& color) {
 
 void BackgroundSprite::setOutlineOpacity(GLubyte opacity) {
     m_outline->setOpacity(opacity);
+}
+
+void BackgroundSprite::visit() {
+    if (m_shouldUpdateLayout) {
+        this->updateLayout();
+        m_shouldUpdateLayout = false;
+    }
+    CCNodeRGBA::visit();
 }
 
 GEODE_NS_IV_END

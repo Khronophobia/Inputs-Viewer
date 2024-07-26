@@ -8,7 +8,7 @@ using namespace geode::prelude;
 GEODE_NS_IV_BEGIN
 
 PlayerInputNode::PlayerInputNode()
-    : m_settingListener(this, &PlayerInputNode::onSettingEvent) {}
+    : m_settingListener(this, &PlayerInputNode::onSettingEvent, IVSettingFilter(SettingEventType::TotalInputsCounter)) {}
 
 PlayerInputNode* PlayerInputNode::create(char const* playerText) {
     auto ret = new (std::nothrow) PlayerInputNode;
@@ -33,14 +33,14 @@ bool PlayerInputNode::init(char const* playerText) {
     m_rightButton->setPositionX(20.25f);
     this->addChild(m_rightButton);
 
-    m_playerIndicator = BackgroundSprite::create();
+    m_playerIndicator = BackgroundSpriteColored::create();
     m_playerIndicator->setAnchorPoint(ccp(0.5f, 0.f));
     this->addChild(m_playerIndicator);
     m_playerIndicatorText = CCLabelBMFont::create(playerText, "chatFont.fnt");
     m_playerIndicatorText->setScale(0.75f);
+    m_playerIndicator->addTextNode(m_playerIndicatorText);
     m_playerIndicator->addChildAtPosition(m_playerIndicatorText, Anchor::Center);
 
-    this->onSettingEvent(SettingEventType::Color);
     this->setShowTotalInputs(IVManager::get().m_showTotalInputs);
     return true;
 }
@@ -67,21 +67,10 @@ void PlayerInputNode::setShowTotalInputs(bool show) {
         m_jumpButton->setPositionY(constants::buttonHeightNormal + 0.5f);
         m_playerIndicator->setContentHeight(constants::buttonHeightNormal);
     }
-    m_playerIndicator->updateLayout();
 }
 
 void PlayerInputNode::onSettingEvent(SettingEventType type) {
-    switch (type) {
-    default: break;
-    case SettingEventType::TotalInputsCounter:
-        this->setShowTotalInputs(IVManager::get().m_showTotalInputs);
-        break;
-    case SettingEventType::Color:
-        utils::setColor4(m_playerIndicator, IVManager::get().m_backgroundReleaseColor);
-        utils::setOutlineColor4(m_playerIndicator, IVManager::get().m_outlineReleaseColor);
-        utils::setColor4(m_playerIndicatorText, IVManager::get().m_textReleaseColor);
-        break;
-    }
+    this->setShowTotalInputs(IVManager::get().m_showTotalInputs);
 }
 
 GEODE_NS_IV_END

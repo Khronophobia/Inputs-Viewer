@@ -7,10 +7,6 @@ using namespace geode::prelude;
 
 GEODE_NS_IV_BEGIN
 
-InputSprite::InputSprite()
-    : m_colorListener(this, &InputSprite::onSettingChange, IVSettingFilter(SettingEventType::Color))
-{}
-
 InputSprite* InputSprite::create(InputType input) {
     auto ret = new (std::nothrow) InputSprite;
     if (ret && ret->init(input)) {
@@ -22,10 +18,11 @@ InputSprite* InputSprite::create(InputType input) {
 }
 
 bool InputSprite::init(InputType input) {
-    if (!BackgroundSprite::init()) return false;
+    if (!BackgroundSpriteColored::init()) return false;
     this->setAnchorPoint(ccp(0.5f, 0.f));
 
     m_inputSymbol = CCSprite::create("symbol_arrow.png"_spr);
+    this->addTextNode(m_inputSymbol);
     this->addChildAtPosition(m_inputSymbol, Anchor::Top);
 
     switch (input) {
@@ -37,6 +34,7 @@ bool InputSprite::init(InputType input) {
     }
 
     m_totalInputsText = CCLabelBMFont::create("0", "chatFont.fnt");
+    this->addTextNode(m_totalInputsText);
     this->addChildAtPosition(m_totalInputsText, Anchor::Bottom, ccp(0.f, 6.f));
 
     this->press(false, false);
@@ -46,19 +44,17 @@ bool InputSprite::init(InputType input) {
 void InputSprite::press(bool pressed, bool updateTotalInputs) {
     m_pressed = pressed;
     if (pressed) {
-        utils::setColor4(this, IVManager::get().m_backgroundPressColor);
-        utils::setOutlineColor4(this, IVManager::get().m_outlinePressColor);
-        utils::setColor4(m_inputSymbol, IVManager::get().m_textPressColor);
-        utils::setColor4(m_totalInputsText, IVManager::get().m_textPressColor);
+        this->setBackgroundColor(IVManager::get().m_backgroundPressColor);
+        this->setOutlineColor(IVManager::get().m_outlinePressColor);
+        this->setTextColor(IVManager::get().m_textPressColor);
         if (updateTotalInputs) {
             ++m_totalInputs;
             this->updateInputDisplay();
         }
     } else {
-        utils::setColor4(this, IVManager::get().m_backgroundReleaseColor);
-        utils::setOutlineColor4(this, IVManager::get().m_outlineReleaseColor);
-        utils::setColor4(m_inputSymbol, IVManager::get().m_textReleaseColor);
-        utils::setColor4(m_totalInputsText, IVManager::get().m_textReleaseColor);
+        this->setBackgroundColor(IVManager::get().m_backgroundReleaseColor);
+        this->setOutlineColor(IVManager::get().m_outlineReleaseColor);
+        this->setTextColor(IVManager::get().m_textReleaseColor);
     }
 }
 
@@ -82,11 +78,6 @@ void InputSprite::setShowTotalInputs(bool show) {
             ->setOffset(ccp(0.f, -constants::buttonHeightNormal * 0.5f));
         this->setContentHeight(constants::buttonHeightNormal);
     }
-    this->updateLayout();
-}
-
-void InputSprite::onSettingChange(SettingEventType type) {
-    this->press(m_pressed, false);
 }
 
 GEODE_NS_IV_END

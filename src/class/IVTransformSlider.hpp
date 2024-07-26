@@ -10,7 +10,6 @@ public:
     TransformSlider(NodeTransform& transform);
     static TransformSlider* create(NodeTransform& transform, PlayerInputNode* inputNode, char const* text);
     bool init(PlayerInputNode* inputNode, char const* text);
-    void setValueAndUpdatePos(float& value, float setter);
 protected:
     NodeTransform& m_transform;
     PlayerInputNode* m_inputNode = nullptr;

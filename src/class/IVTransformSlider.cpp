@@ -28,7 +28,8 @@ bool TransformSlider::init(PlayerInputNode* inputNode, char const* text) {
         -winSize.width * 0.5f,
         winSize.width * 0.5f,
         [this](FloatSlider* slider) {
-            this->setValueAndUpdatePos(m_transform.position.x, slider->getValue());
+            m_transform.position.x = slider->getValue();
+            m_transform.applyTransform(m_inputNode);
         }
     );
     m_xPosSlider->setPositionY(18.f);
@@ -40,7 +41,8 @@ bool TransformSlider::init(PlayerInputNode* inputNode, char const* text) {
         -winSize.height * 0.5f,
         winSize.height * 0.5f,
         [this](FloatSlider* slider) {
-            this->setValueAndUpdatePos(m_transform.position.y, slider->getValue());
+            m_transform.position.y = slider->getValue();
+            m_transform.applyTransform(m_inputNode);
         }
     );
     m_yPosSlider->setPositionY(-12.f);
@@ -52,7 +54,8 @@ bool TransformSlider::init(PlayerInputNode* inputNode, char const* text) {
         0.f,
         2.f,
         [this](FloatSlider* slider) {
-            this->setValueAndUpdatePos(m_transform.scale, slider->getValue());
+            m_transform.scale = slider->getValue();
+            m_transform.applyTransform(m_inputNode);
         }
     );
     m_scaleSlider->setPositionY(-42.f);
@@ -64,12 +67,6 @@ bool TransformSlider::init(PlayerInputNode* inputNode, char const* text) {
     this->addChild(m_textLabel);
 
     return true;
-}
-
-void TransformSlider::setValueAndUpdatePos(float& value, float setter) {
-    value = setter;
-
-    m_transform.applyTransform(m_inputNode);
 }
 
 GEODE_NS_IV_END

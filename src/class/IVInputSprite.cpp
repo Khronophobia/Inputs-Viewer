@@ -41,13 +41,13 @@ bool InputSprite::init(InputType input) {
     return true;
 }
 
-void InputSprite::press(bool pressed, bool updateTotalInputs) {
+void InputSprite::press(bool pressed, bool updateInputs) {
     m_pressed = pressed;
     if (pressed) {
         this->setBackgroundColor(IVManager::get().m_backgroundPressColor);
         this->setOutlineColor(IVManager::get().m_outlinePressColor);
         this->setTextColor(IVManager::get().m_textPressColor);
-        if (updateTotalInputs) {
+        if (updateInputs) {
             ++m_totalInputs;
             this->updateInputDisplay();
         }

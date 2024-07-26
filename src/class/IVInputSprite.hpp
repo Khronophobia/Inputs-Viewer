@@ -9,7 +9,7 @@ class InputSprite : public BackgroundSpriteColored {
 public:
     static InputSprite* create(InputType input);
     bool init(InputType input);
-    void press(bool pressed, bool updateTotalInputs = true);
+    void press(bool pressed, bool updateInputs = true);
     void updateInputDisplay();
     void setShowTotalInputs(bool show);
     void onSettingChange(SettingEventType type);

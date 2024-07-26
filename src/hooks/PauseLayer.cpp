@@ -10,7 +10,7 @@ struct IVPauseLayer : Modify<IVPauseLayer, PauseLayer> {
 
         if (auto menu = getChildByID("right-button-menu")) {
             auto settingBtn = CCMenuItemSpriteExtra::create(
-                CircleButtonSprite::createWithSprite("settingsIcon.png"_spr, 0.8f, CircleBaseColor::Green, CircleBaseSize::Tiny),
+                CircleButtonSprite::createWithSprite("settingsIcon.png"_spr, 1.f, CircleBaseColor::Green, CircleBaseSize::Tiny),
                 this, menu_selector(IVPauseLayer::onIVSetting)
             );
             menu->addChild(settingBtn);

@@ -1,5 +1,5 @@
 #pragma once
-#include "IVLayer.hpp"
+#include "IVInputsViewLayer.hpp"
 #include "IVTransformSlider.hpp"
 
 GEODE_NS_IV_BEGIN

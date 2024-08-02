@@ -1,5 +1,5 @@
 #include <Geode/modify/UILayer.hpp>
-#include <class/IVLayer.hpp>
+#include <class/IVInputsViewLayer.hpp>
 
 struct IVUILayer : geode::Modify<IVUILayer, UILayer> {
     struct Fields {

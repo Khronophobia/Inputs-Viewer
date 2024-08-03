@@ -1,5 +1,5 @@
 # Inputs Viewer
 
-Shows input during gameplay. Configure in the pause menu.
+Shows player inputs during gameplay. Configure in the pause menu.
 
-Tested on Windows, untested on Mac
+This mod was inspired by the Key Viewer feature in <cy>ADOFAI Tweaks</c>, a mod for <cj>A Dance of</c> <cr>Fire</c> <cj>and Ice</c>.

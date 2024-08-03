@@ -130,7 +130,7 @@ void InputSprite::updateButtonAppearance() {
     } else if (IVManager::get().m_showTotalInputs && IVManager::get().m_showCPS) {
         m_textScale = 0.45f;
         static_cast<AnchorLayoutOptions*>(m_totalInputsText->getLayoutOptions())
-            ->setOffset(ccp(0.f, 11.f));
+            ->setOffset(ccp(0.f, 11.5f));
         static_cast<AnchorLayoutOptions*>(m_cpsText->getLayoutOptions())
             ->setOffset(ccp(0.f, 5.f));
     }   

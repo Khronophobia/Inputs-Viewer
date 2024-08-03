@@ -21,8 +21,8 @@ IVManager::IVManager()
     : GEODE_IV_CONSTRUCT_COLOR(background)
     , GEODE_IV_CONSTRUCT_COLOR(outline)
     , GEODE_IV_CONSTRUCT_COLOR(text)
-    , m_p1Transform(Mod::get()->getSavedValue<NodeTransform>("p1-display", { .position{-150.f, -150.f} }))
-    , m_p2Transform(Mod::get()->getSavedValue<NodeTransform>("p2-display", { .position{150.f, -150.f} }))
+    , m_p1Transform(Mod::get()->getSavedValue<NodeTransform>("p1-display", IVManager::getDefaultP1Transform()))
+    , m_p2Transform(Mod::get()->getSavedValue<NodeTransform>("p2-display", IVManager::getDefaultP2Transform()))
     , m_showTotalInputs(Mod::get()->getSavedValue("show-total-inputs", false))
 {}
 
@@ -30,6 +30,28 @@ IVManager& IVManager::get() {
     static auto inst = std::make_unique<IVManager>();
 
     return *inst;
+}
+
+NodeTransform IVManager::getDefaultP1Transform() {
+    auto winSize = CCDirector::get()->getWinSize();
+    auto maxWidth = winSize.width * 0.5f;
+    auto maxHeight = winSize.height * 0.5f;
+
+    return {
+        .position = {-maxWidth * 0.5f, -maxHeight + 4.f},
+        .scale = 1.f
+    };
+}
+
+NodeTransform IVManager::getDefaultP2Transform() {
+    auto winSize = CCDirector::get()->getWinSize();
+    auto maxWidth = winSize.width * 0.5f;
+    auto maxHeight = winSize.height * 0.5f;
+
+    return {
+        .position = {maxWidth * 0.5f, -maxHeight + 4.f},
+        .scale = 1.f
+    };
 }
 
 $on_mod(DataSaved) {

@@ -11,6 +11,8 @@ class IVManager {
 public:
     IVManager();
     static IVManager& get();
+    static NodeTransform getDefaultP1Transform();
+    static NodeTransform getDefaultP2Transform();
 public:
     cocos2d::ccColor4B m_backgroundPressColor;
     cocos2d::ccColor4B m_backgroundReleaseColor;

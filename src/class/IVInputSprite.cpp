@@ -7,9 +7,9 @@ using namespace geode::prelude;
 
 GEODE_NS_IV_BEGIN
 
-InputSprite* InputSprite::create(PlayerButton input) {
+InputSprite* InputSprite::create(PlayerButton input, char const* playerText) {
     auto ret = new (std::nothrow) InputSprite;
-    if (ret && ret->init(input)) {
+    if (ret && ret->init(input, playerText)) {
         ret->autorelease();
         return ret;
     }
@@ -17,7 +17,7 @@ InputSprite* InputSprite::create(PlayerButton input) {
     return nullptr;
 }
 
-bool InputSprite::init(PlayerButton input) {
+bool InputSprite::init(PlayerButton input, char const* playerText) {
     if (!BackgroundSprite::init()) return false;
     this->setAnchorPoint(ccp(0.5f, 0.f));
 
@@ -31,6 +31,13 @@ bool InputSprite::init(PlayerButton input) {
         m_inputSymbol->setRotation(-90.f); break;
     case PlayerButton::Right:
         m_inputSymbol->setRotation(90.f); break;
+    }
+
+    if (playerText) {
+        m_playerText = CCLabelBMFont::create(playerText, "chatFont.fnt");
+        m_playerText->setScale(0.6f);
+        this->addTextNode(m_playerText);
+        this->addChildAtPosition(m_playerText, Anchor::Top);
     }
 
     m_totalInputsText = CCLabelBMFont::create("0", "chatFont.fnt");
@@ -65,16 +72,27 @@ void InputSprite::updateInputDisplay() {
     m_totalInputsText->limitLabelWidth(16.f, 0.5f, 0.1f);
 }
 
+void InputSprite::setMinimal(bool minimal) {
+    if (m_playerText) {
+        m_inputSymbol->setVisible(!minimal);
+        m_playerText->setVisible(minimal);
+    }
+}
+
 void InputSprite::setShowTotalInputs(bool show) {
     if (show) {
         m_totalInputsText->setVisible(true);
         this->updateInputDisplay();
         static_cast<AnchorLayoutOptions*>(m_inputSymbol->getLayoutOptions())
             ->setOffset(ccp(0.f, -7.5f));
+        if (m_playerText) static_cast<AnchorLayoutOptions*>(m_playerText->getLayoutOptions())
+            ->setOffset(ccp(0.f, -7.5f));
         this->setContentHeight(constants::buttonHeightTall);
     } else {
         m_totalInputsText->setVisible(false);
         static_cast<AnchorLayoutOptions*>(m_inputSymbol->getLayoutOptions())
+            ->setOffset(ccp(0.f, -constants::buttonHeightNormal * 0.5f));
+        if (m_playerText) static_cast<AnchorLayoutOptions*>(m_playerText->getLayoutOptions())
             ->setOffset(ccp(0.f, -constants::buttonHeightNormal * 0.5f));
         this->setContentHeight(constants::buttonHeightNormal);
     }

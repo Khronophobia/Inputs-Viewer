@@ -7,13 +7,16 @@ GEODE_NS_IV_BEGIN
 class PlayerInputNode : public cocos2d::CCNode {
 public:
     PlayerInputNode();
-    static PlayerInputNode* create(char const* playerText);
-    bool init(char const* playerText);
+    static PlayerInputNode* create(GJBaseGameLayer* gameLayer, char const* playerText);
+    bool init(GJBaseGameLayer* gameLayer, char const* playerText);
     void handleButton(bool down, PlayerButton input, bool updateTotalInputs = true);
-    void onSettingEvent(SettingEventType type);
+    void onRefreshAppearance(SettingEventType type);
     void setShowTotalInputs(bool show);
     void releaseAllButtons();
 protected:
+    bool isMinimalMode() const;
+protected:
+    GJBaseGameLayer* m_gameLayer = nullptr;
     InputSprite* m_jumpButton = nullptr;
     InputSprite* m_leftButton = nullptr;
     InputSprite* m_rightButton = nullptr;

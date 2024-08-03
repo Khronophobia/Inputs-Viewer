@@ -22,9 +22,9 @@ bool InputsViewLayer::init(GJBaseGameLayer* gameLayer) {
     if (!CCLayer::init()) return false;
     m_gameLayer = gameLayer;
 
-    m_p1InputNode = PlayerInputNode::create("P1");
+    m_p1InputNode = PlayerInputNode::create(gameLayer, "P1");
     this->addChild(m_p1InputNode);
-    m_p2InputNode = PlayerInputNode::create("P2");
+    m_p2InputNode = PlayerInputNode::create(gameLayer, "P2");
     this->addChild(m_p2InputNode);
 
     this->refreshDisplay();

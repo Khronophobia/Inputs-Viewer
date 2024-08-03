@@ -6,6 +6,5 @@ struct IVUILayer : geode::Modify<IVUILayer, UILayer> {
         inputs_viewer::InputsViewLayer* m_ivLayer = nullptr;
     };
 
-    $override
-    bool init(GJBaseGameLayer* gameLayer);
+    void setupInputsViewer();
 };

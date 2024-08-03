@@ -10,6 +10,9 @@
 	"developer": "Khronophobia",
 	"description": "",
 	"repository": "https://github.com/Khronophobia/Inputs-Viewer",
+	"tags": [
+		"interface"
+	],
 	"resources": {
 		"sprites": [
 			"resources/*.png"

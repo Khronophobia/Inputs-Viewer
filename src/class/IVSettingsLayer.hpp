@@ -4,15 +4,15 @@
 
 GEODE_NS_IV_BEGIN
 
-class SettingsLayer : public geode::Popup<> {
+class SettingsLayer : public geode::Popup<GJBaseGameLayer*> {
 public:
-    static SettingsLayer* create();
+    static SettingsLayer* create(GJBaseGameLayer* gameLayer);
 public:
     void onModSettings(cocos2d::CCObject*);
 public:
     void onExit() override;
 protected:
-    bool setup() override;
+    bool setup(GJBaseGameLayer* gameLayer) override;
     CCMenuItemToggler* createCheckbox(bool& checkValue, char const* text, std::optional<SettingEventType> postEvent, cocos2d::Anchor anchor, cocos2d::CCPoint const& offset = {});
 protected:
     InputsViewLayer* m_inputsLayer = nullptr;

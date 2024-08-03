@@ -8,9 +8,9 @@ GEODE_NS_IV_BEGIN
 InputsViewLayer::InputsViewLayer()
     : m_settingListener(this, &InputsViewLayer::onSettingEvent, IVSettingFilter(SettingEventType::RefreshView)) {}
 
-InputsViewLayer* InputsViewLayer::create() {
+InputsViewLayer* InputsViewLayer::create(GJBaseGameLayer* gameLayer) {
     auto ret = new (std::nothrow) InputsViewLayer;
-    if (ret && ret->init()) {
+    if (ret && ret->init(gameLayer)) {
         ret->autorelease();
         return ret;
     }
@@ -18,8 +18,9 @@ InputsViewLayer* InputsViewLayer::create() {
     return nullptr;
 }
 
-bool InputsViewLayer::init() {
+bool InputsViewLayer::init(GJBaseGameLayer* gameLayer) {
     if (!CCLayer::init()) return false;
+    m_gameLayer = gameLayer;
 
     m_p1InputNode = PlayerInputNode::create("P1");
     this->addChild(m_p1InputNode);

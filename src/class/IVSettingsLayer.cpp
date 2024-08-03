@@ -7,9 +7,9 @@ using namespace geode::prelude;
 
 GEODE_NS_IV_BEGIN
 
-SettingsLayer* SettingsLayer::create() {
+SettingsLayer* SettingsLayer::create(GJBaseGameLayer* gameLayer) {
     auto ret = new (std::nothrow) SettingsLayer;
-    if (ret && ret->initAnchored(350.f, 260.f, "square02_001.png")) {
+    if (ret && ret->initAnchored(350.f, 260.f, gameLayer, "square02_001.png")) {
         ret->autorelease();
         return ret;
     }
@@ -17,7 +17,7 @@ SettingsLayer* SettingsLayer::create() {
     return nullptr;
 }
 
-bool SettingsLayer::setup() {
+bool SettingsLayer::setup(GJBaseGameLayer* gameLayer) {
     this->setTitle("Inputs Viewer Config");
     this->setColor({127, 127, 127});
     this->setOpacity(255);
@@ -30,7 +30,7 @@ bool SettingsLayer::setup() {
     );
     m_buttonMenu->addChildAtPosition(modSettingsBtn, Anchor::TopRight, ccp(-3.f, -3.f));
 
-    m_inputsLayer = InputsViewLayer::create();
+    m_inputsLayer = InputsViewLayer::create(gameLayer);
     m_inputsLayer->setPosition(CCDirector::get()->getWinSize() * 0.5f);
     this->insertBefore(m_inputsLayer, m_mainLayer);
 

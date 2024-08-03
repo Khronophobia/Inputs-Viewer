@@ -19,6 +19,6 @@ struct IVPauseLayer : Modify<IVPauseLayer, PauseLayer> {
         }
     }
     void onIVSetting(CCObject*) {
-        inputs_viewer::SettingsLayer::create()->show();
+        inputs_viewer::SettingsLayer::create(PlayLayer::get())->show();
     }
 };

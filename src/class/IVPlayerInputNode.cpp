@@ -33,7 +33,7 @@ bool PlayerInputNode::init(char const* playerText) {
     m_rightButton->setPositionX(20.25f);
     this->addChild(m_rightButton);
 
-    m_playerIndicator = BackgroundSpriteColored::create();
+    m_playerIndicator = BackgroundSprite::create();
     m_playerIndicator->setAnchorPoint(ccp(0.5f, 0.f));
     this->addChild(m_playerIndicator);
     m_playerIndicatorText = CCLabelBMFont::create(playerText, "chatFont.fnt");

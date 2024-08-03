@@ -17,7 +17,7 @@ protected:
     InputSprite* m_jumpButton = nullptr;
     InputSprite* m_leftButton = nullptr;
     InputSprite* m_rightButton = nullptr;
-    BackgroundSpriteColored* m_playerIndicator = nullptr;
+    BackgroundSprite* m_playerIndicator = nullptr;
     cocos2d::CCLabelBMFont* m_playerIndicatorText = nullptr;
     geode::EventListener<IVSettingFilter> m_settingListener;
 };

@@ -1,10 +1,10 @@
 #pragma once
-#include "IVBackgroundSpriteColored.hpp"
+#include "IVBackgroundSprite.hpp"
 #include <IVEvent.hpp>
 
 GEODE_NS_IV_BEGIN
 
-class InputSprite : public BackgroundSpriteColored {
+class InputSprite : public BackgroundSprite {
 public:
     static InputSprite* create(PlayerButton input);
     bool init(PlayerButton input);

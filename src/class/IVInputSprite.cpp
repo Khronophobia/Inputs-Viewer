@@ -18,7 +18,7 @@ InputSprite* InputSprite::create(PlayerButton input) {
 }
 
 bool InputSprite::init(PlayerButton input) {
-    if (!BackgroundSpriteColored::init()) return false;
+    if (!BackgroundSprite::init()) return false;
     this->setAnchorPoint(ccp(0.5f, 0.f));
 
     m_inputSymbol = CCSprite::create("symbol_arrow.png"_spr);

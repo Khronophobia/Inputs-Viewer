@@ -8,11 +8,6 @@ namespace utils {
         node->setColor({color.r, color.g, color.b});
         node->setOpacity(color.a);
     }
-
-    void setOutlineColor4(BackgroundSprite* node, cocos2d::ccColor4B const& color) {
-        node->setOutlineColor({color.r, color.g, color.b});
-        node->setOutlineOpacity(color.a);
-    }
 }
 
 GEODE_NS_IV_END

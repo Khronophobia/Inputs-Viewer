@@ -97,7 +97,7 @@ void InputSprite::setShowTotalInputs(bool show) {
 void InputSprite::setShowCPS(bool show) {
     if (show) {
         m_cpsText->setVisible(true);
-        this->schedule(schedule_selector(InputSprite::updateCPS), 1.f, kCCRepeatForever, 0.f);
+        this->schedule(schedule_selector(InputSprite::updateCPS), 1.f);
         m_clicksPerSecond = 0;
         m_cpsText->setString("0");
     } else {

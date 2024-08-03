@@ -8,8 +8,10 @@ GEODE_NS_IV_BEGIN
 class TransformSlider : public cocos2d::CCNode {
 public:
     TransformSlider(NodeTransform& transform);
-    static TransformSlider* create(NodeTransform& transform, PlayerInputNode* inputNode, char const* text);
-    bool init(PlayerInputNode* inputNode, char const* text);
+    static TransformSlider* create(NodeTransform& transform, PlayerInputNode* inputNode, char const* text, geode::utils::MiniFunction<NodeTransform()>&& defaultPosFunc);
+    bool init(PlayerInputNode* inputNode, char const* text, geode::utils::MiniFunction<NodeTransform()>&& defaultPosFunc);
+public:
+    void onDefaultPosition(cocos2d::CCObject*);
 protected:
     NodeTransform& m_transform;
     PlayerInputNode* m_inputNode = nullptr;
@@ -17,6 +19,7 @@ protected:
     FloatSlider* m_yPosSlider = nullptr;
     FloatSlider* m_scaleSlider = nullptr;
     cocos2d::CCLabelBMFont* m_textLabel = nullptr;
+    geode::utils::MiniFunction<NodeTransform()> m_defaultPosFunc = nullptr;
 };
 
 GEODE_NS_IV_END

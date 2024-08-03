@@ -7,9 +7,9 @@ GEODE_NS_IV_BEGIN
 TransformSlider::TransformSlider(NodeTransform& transform)
     : m_transform(transform) {}
 
-TransformSlider* TransformSlider::create(NodeTransform& transform, PlayerInputNode* inputNode, char const* text) {
+TransformSlider* TransformSlider::create(NodeTransform& transform, PlayerInputNode* inputNode, char const* text, MiniFunction<NodeTransform()>&& defaultPosFunc) {
     auto ret = new (std::nothrow) TransformSlider(transform);
-    if (ret && ret->init(inputNode, text)) {
+    if (ret && ret->init(inputNode, text, std::move(defaultPosFunc))) {
         ret->autorelease();
         return ret;
     }
@@ -18,8 +18,9 @@ TransformSlider* TransformSlider::create(NodeTransform& transform, PlayerInputNo
     return nullptr;
 }
 
-bool TransformSlider::init(PlayerInputNode* inputNode, char const* text) {
+bool TransformSlider::init(PlayerInputNode* inputNode, char const* text, MiniFunction<NodeTransform()>&& defaultPosFunc) {
     m_inputNode = inputNode;
+    m_defaultPosFunc = std::move(defaultPosFunc);
     auto winSize = CCDirector::get()->getWinSize();
 
     m_xPosSlider = FloatSlider::create(
@@ -66,7 +67,38 @@ bool TransformSlider::init(PlayerInputNode* inputNode, char const* text) {
     m_textLabel->setPositionY(56.f);
     this->addChild(m_textLabel);
 
+    if (m_defaultPosFunc) {
+        auto resetSpr = CCSprite::createWithSpriteFrameName("GJ_replayBtn_001.png");
+        resetSpr->setScale(0.25f);
+        auto resetBtn = CCMenuItemSpriteExtra::create(
+            resetSpr,
+            this, menu_selector(TransformSlider::onDefaultPosition)
+        );
+        auto menu = CCMenu::create();
+        menu->setPosition(m_textLabel->getPosition() + ccp(m_textLabel->getScaledContentWidth() * 0.5f + 10.f, 0.f));
+        this->addChild(menu);
+
+        menu->addChild(resetBtn);
+    }
+
     return true;
+}
+
+void TransformSlider::onDefaultPosition(CCObject*) {
+    createQuickPopup(
+        "Reset Position",
+        "Reset to default position? <cb>(The default position is based on your aspect ratio)</c>",
+        "No", "Yes",
+        [this](auto, bool btn2) {
+            if (btn2) {
+                m_transform = m_defaultPosFunc();
+                m_xPosSlider->setValue(m_transform.position.x);
+                m_yPosSlider->setValue(m_transform.position.y);
+                m_scaleSlider->setValue(m_transform.scale);
+                m_transform.applyTransform(m_inputNode);
+            }
+        }
+    );
 }
 
 GEODE_NS_IV_END

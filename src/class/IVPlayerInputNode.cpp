@@ -69,6 +69,12 @@ void PlayerInputNode::setShowTotalInputs(bool show) {
     }
 }
 
+void PlayerInputNode::releaseAllButtons() {
+    m_jumpButton->press(false, false);
+    m_leftButton->press(false, false);
+    m_rightButton->press(false, false);
+}
+
 void PlayerInputNode::onSettingEvent(SettingEventType type) {
     this->setShowTotalInputs(IVManager::get().m_showTotalInputs);
 }

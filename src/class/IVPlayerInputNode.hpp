@@ -12,6 +12,7 @@ public:
     void handleButton(bool down, PlayerButton input, bool updateTotalInputs = true);
     void onSettingEvent(SettingEventType type);
     void setShowTotalInputs(bool show);
+    void releaseAllButtons();
 protected:
     InputSprite* m_jumpButton = nullptr;
     InputSprite* m_leftButton = nullptr;

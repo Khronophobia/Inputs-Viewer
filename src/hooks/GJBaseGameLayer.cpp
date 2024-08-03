@@ -14,16 +14,10 @@ void IVGJBaseGameLayer::handleButton(bool down, int button, bool isP1) {
     }
 }
 
-static void resetInputNode(inputs_viewer::PlayerInputNode* node) {
-    node->handleButton(false, PlayerButton::Jump, false);
-    node->handleButton(false, PlayerButton::Left, false);
-    node->handleButton(false, PlayerButton::Right, false);
-}
-
 void IVGJBaseGameLayer::resetLevelVariables() {
     GJBaseGameLayer::resetLevelVariables();
     auto ivLayer = static_cast<IVUILayer*>(m_uiLayer)->m_fields->m_ivLayer;
 
-    resetInputNode(ivLayer->m_p1InputNode);
-    resetInputNode(ivLayer->m_p2InputNode);
+    ivLayer->m_p1InputNode->releaseAllButtons();
+    ivLayer->m_p2InputNode->releaseAllButtons();
 }

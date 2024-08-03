@@ -42,9 +42,14 @@ bool InputSprite::init(PlayerButton input, char const* playerText) {
 
     m_totalInputsText = CCLabelBMFont::create("0", "chatFont.fnt");
     this->addTextNode(m_totalInputsText);
-    this->addChildAtPosition(m_totalInputsText, Anchor::Bottom, ccp(0.f, 6.f));
+    this->addChildAtPosition(m_totalInputsText, Anchor::Bottom);
+
+    m_cpsText = CCLabelBMFont::create("0", "chatFont.fnt");
+    this->addTextNode(m_cpsText);
+    this->addChildAtPosition(m_cpsText, Anchor::Bottom);
 
     this->press(false, false);
+    this->setContentWidth(constants::buttonWidth);
     return true;
 }
 
@@ -56,6 +61,7 @@ void InputSprite::press(bool pressed, bool updateInputs) {
         this->setTextColor(IVManager::get().m_textPressColor);
         if (updateInputs) {
             ++m_totalInputs;
+            ++m_clicksPerSecond;
             this->updateInputDisplay();
         }
     } else {
@@ -69,7 +75,7 @@ void InputSprite::updateInputDisplay() {
     if (!IVManager::get().m_showTotalInputs) return;
 
     m_totalInputsText->setString(std::to_string(m_totalInputs).c_str());
-    m_totalInputsText->limitLabelWidth(16.f, 0.5f, 0.1f);
+    this->updateLabelWidth(m_totalInputsText);
 }
 
 void InputSprite::setMinimal(bool minimal) {
@@ -83,19 +89,66 @@ void InputSprite::setShowTotalInputs(bool show) {
     if (show) {
         m_totalInputsText->setVisible(true);
         this->updateInputDisplay();
+    } else {
+        m_totalInputsText->setVisible(false);
+    }
+}
+
+void InputSprite::setShowCPS(bool show) {
+    if (show) {
+        m_cpsText->setVisible(true);
+        this->schedule(schedule_selector(InputSprite::updateCPS), 1.f, kCCRepeatForever, 0.f);
+        m_clicksPerSecond = 0;
+        m_cpsText->setString("0");
+    } else {
+        m_cpsText->setVisible(false);
+        this->unschedule(schedule_selector(InputSprite::updateCPS));
+    }
+}
+
+void InputSprite::updateButtonAppearance() {
+    if (IVManager::get().m_showTotalInputs || IVManager::get().m_showCPS) {
         static_cast<AnchorLayoutOptions*>(m_inputSymbol->getLayoutOptions())
             ->setOffset(ccp(0.f, -7.5f));
         if (m_playerText) static_cast<AnchorLayoutOptions*>(m_playerText->getLayoutOptions())
             ->setOffset(ccp(0.f, -7.5f));
         this->setContentHeight(constants::buttonHeightTall);
     } else {
-        m_totalInputsText->setVisible(false);
         static_cast<AnchorLayoutOptions*>(m_inputSymbol->getLayoutOptions())
             ->setOffset(ccp(0.f, -constants::buttonHeightNormal * 0.5f));
         if (m_playerText) static_cast<AnchorLayoutOptions*>(m_playerText->getLayoutOptions())
             ->setOffset(ccp(0.f, -constants::buttonHeightNormal * 0.5f));
         this->setContentHeight(constants::buttonHeightNormal);
     }
+
+    if (IVManager::get().m_showTotalInputs ^ IVManager::get().m_showCPS) {
+        m_textScale = 0.5f;
+        static_cast<AnchorLayoutOptions*>(m_totalInputsText->getLayoutOptions())
+            ->setOffset(ccp(0.f, 8.f));
+        static_cast<AnchorLayoutOptions*>(m_cpsText->getLayoutOptions())
+            ->setOffset(ccp(0.f, 8.f));
+    } else if (IVManager::get().m_showTotalInputs && IVManager::get().m_showCPS) {
+        m_textScale = 0.45f;
+        static_cast<AnchorLayoutOptions*>(m_totalInputsText->getLayoutOptions())
+            ->setOffset(ccp(0.f, 11.f));
+        static_cast<AnchorLayoutOptions*>(m_cpsText->getLayoutOptions())
+            ->setOffset(ccp(0.f, 5.f));
+    }   
+
+    this->updateLabelWidth(m_totalInputsText);
+    this->updateLabelWidth(m_cpsText);
+    m_shouldUpdateLayout = true;
+}
+
+void InputSprite::updateCPS(float dt) {
+    m_cpsText->setString(std::to_string(m_clicksPerSecond).c_str());
+    this->updateLabelWidth(m_cpsText);
+
+    m_clicksPerSecond = 0;
+}
+
+void InputSprite::updateLabelWidth(CCLabelBMFont* font) {
+    font->limitLabelWidth(16.f, m_textScale, 0.1f);
 }
 
 GEODE_NS_IV_END

@@ -41,8 +41,9 @@ bool SettingsLayer::setup(GJBaseGameLayer* gameLayer) {
     m_mainLayer->addChildAtPosition(m_p2Slider, Anchor::Center, ccp(80.f, 20.f));
 
     this->createCheckbox(IVManager::get().m_showTotalInputs, "Show Total Inputs", SettingEventType::KeyAppearance, Anchor::Center, ccp(-90.f, -50.f));
+    this->createCheckbox(IVManager::get().m_showCPS, "Show Clicks per Seconds", SettingEventType::KeyAppearance, Anchor::Center, ccp(-90.f, -80.f));
     this->createCheckbox(
-        IVManager::get().m_minimalIfNonPlatformer, "Hide L&R in Non-Platformer", SettingEventType::KeyAppearance, Anchor::Center, ccp(-90.f, -80.f),
+        IVManager::get().m_minimalIfNonPlatformer, "Hide L&R in Non-Platformer", SettingEventType::KeyAppearance, Anchor::Center, ccp(-90.f, -110.f),
         "Hide the left and right buttons in non-platformer levels."
     );
 

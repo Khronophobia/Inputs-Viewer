@@ -24,6 +24,7 @@ public:
     NodeTransform m_p1Transform;
     NodeTransform m_p2Transform;
     bool m_showTotalInputs;
+    bool m_showCPS;
     bool m_minimalIfNonPlatformer;
 protected:
     RGBASettingListener m_backgroundPressListener;

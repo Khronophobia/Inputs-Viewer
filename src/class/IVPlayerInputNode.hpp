@@ -12,8 +12,10 @@ public:
     void handleButton(bool down, PlayerButton input, bool updateTotalInputs = true);
     void onRefreshAppearance(SettingEventType type);
     void setShowTotalInputs(bool show);
+    void setShowCPS(bool show);
     void releaseAllButtons();
 protected:
+    void updateAppearance();
     bool isMinimalMode() const;
 protected:
     GJBaseGameLayer* m_gameLayer = nullptr;

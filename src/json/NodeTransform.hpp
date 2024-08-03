@@ -3,6 +3,7 @@
 struct NodeTransform {
     cocos2d::CCPoint position{};
     float scale{1.f};
+    bool isVisible = true;
 
     // Apply transform to a node
     void applyTransform(cocos2d::CCNode* node);

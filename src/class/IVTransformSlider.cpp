@@ -67,6 +67,18 @@ bool TransformSlider::init(PlayerInputNode* inputNode, char const* text, MiniFun
     m_textLabel->setPositionY(56.f);
     this->addChild(m_textLabel);
 
+    m_buttonMenu = CCMenu::create();
+    m_buttonMenu->setPosition(0.f, m_textLabel->getPositionY());
+    this->addChild(m_buttonMenu);
+
+    auto visibilityCheckbox = CCMenuItemToggler::createWithStandardSprites(
+        this, menu_selector(TransformSlider::onSetVisibility),
+        0.4f
+    );
+    visibilityCheckbox->toggle(m_transform.isVisible);
+    visibilityCheckbox->setPositionX(-m_textLabel->getScaledContentWidth() * 0.5f - 10.f);
+    m_buttonMenu->addChild(visibilityCheckbox);
+
     if (m_defaultPosFunc) {
         auto resetSpr = CCSprite::createWithSpriteFrameName("GJ_replayBtn_001.png");
         resetSpr->setScale(0.25f);
@@ -74,11 +86,9 @@ bool TransformSlider::init(PlayerInputNode* inputNode, char const* text, MiniFun
             resetSpr,
             this, menu_selector(TransformSlider::onDefaultPosition)
         );
-        auto menu = CCMenu::create();
-        menu->setPosition(m_textLabel->getPosition() + ccp(m_textLabel->getScaledContentWidth() * 0.5f + 10.f, 0.f));
-        this->addChild(menu);
+        resetBtn->setPositionX(m_textLabel->getScaledContentWidth() * 0.5f + 10.f);
 
-        menu->addChild(resetBtn);
+        m_buttonMenu->addChild(resetBtn);
     }
 
     return true;
@@ -99,6 +109,12 @@ void TransformSlider::onDefaultPosition(CCObject*) {
             }
         }
     );
+}
+
+void TransformSlider::onSetVisibility(CCObject* sender) {
+    auto btn = static_cast<CCMenuItemToggler*>(sender);
+    m_transform.isVisible = !btn->isToggled();
+    m_inputNode->setVisible(m_transform.isVisible);
 }
 
 GEODE_NS_IV_END

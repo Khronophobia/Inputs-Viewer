@@ -93,13 +93,15 @@ CCSize matjson::Serialize<CCSize>::from_json(matjson::Value const& value) {
 
 bool matjson::Serialize<NodeTransform>::is_json(matjson::Value const& value) {
     return verifyJsonObject<CCPoint>(value, "position") &&
-        verifyJsonObject<float>(value, "scale");
+        verifyJsonObject<float>(value, "scale") &&
+        verifyJsonObject<bool>(value, "visible");
 }
 
 matjson::Value matjson::Serialize<NodeTransform>::to_json(NodeTransform const& value) {
     return matjson::Object{
         {"position", value.position},
-        {"scale", value.scale}
+        {"scale", value.scale},
+        {"visible", value.isVisible}
     };
 }
 
@@ -107,5 +109,6 @@ NodeTransform matjson::Serialize<NodeTransform>::from_json(matjson::Value const&
     return {
         .position = value["position"].as<CCPoint>(),
         .scale = static_cast<float>(value["scale"].as_double()),
+        .isVisible = value["visible"].as_bool()
     };
 }

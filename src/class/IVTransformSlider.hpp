@@ -12,6 +12,7 @@ public:
     bool init(PlayerInputNode* inputNode, char const* text, geode::utils::MiniFunction<NodeTransform()>&& defaultPosFunc);
 public:
     void onDefaultPosition(cocos2d::CCObject*);
+    void onSetVisibility(cocos2d::CCObject*);
 protected:
     NodeTransform& m_transform;
     PlayerInputNode* m_inputNode = nullptr;
@@ -19,6 +20,7 @@ protected:
     FloatSlider* m_yPosSlider = nullptr;
     FloatSlider* m_scaleSlider = nullptr;
     cocos2d::CCLabelBMFont* m_textLabel = nullptr;
+    cocos2d::CCMenu* m_buttonMenu = nullptr;
     geode::utils::MiniFunction<NodeTransform()> m_defaultPosFunc = nullptr;
 };
 

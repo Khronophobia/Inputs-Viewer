@@ -7,7 +7,7 @@ using namespace geode::prelude;
 
 GEODE_NS_IV_BEGIN
 
-InputSprite* InputSprite::create(InputType input) {
+InputSprite* InputSprite::create(PlayerButton input) {
     auto ret = new (std::nothrow) InputSprite;
     if (ret && ret->init(input)) {
         ret->autorelease();
@@ -17,7 +17,7 @@ InputSprite* InputSprite::create(InputType input) {
     return nullptr;
 }
 
-bool InputSprite::init(InputType input) {
+bool InputSprite::init(PlayerButton input) {
     if (!BackgroundSpriteColored::init()) return false;
     this->setAnchorPoint(ccp(0.5f, 0.f));
 
@@ -26,10 +26,10 @@ bool InputSprite::init(InputType input) {
     this->addChildAtPosition(m_inputSymbol, Anchor::Top);
 
     switch (input) {
-    case InputType::Jump: break;
-    case InputType::Left:
+    case PlayerButton::Jump: break;
+    case PlayerButton::Left:
         m_inputSymbol->setRotation(-90.f); break;
-    case InputType::Right:
+    case PlayerButton::Right:
         m_inputSymbol->setRotation(90.f); break;
     }
 

@@ -1,14 +1,13 @@
 #pragma once
 #include "IVBackgroundSpriteColored.hpp"
-#include "IVInputType.hpp"
 #include <IVEvent.hpp>
 
 GEODE_NS_IV_BEGIN
 
 class InputSprite : public BackgroundSpriteColored {
 public:
-    static InputSprite* create(InputType input);
-    bool init(InputType input);
+    static InputSprite* create(PlayerButton input);
+    bool init(PlayerButton input);
     void press(bool pressed, bool updateInputs = true);
     void updateInputDisplay();
     void setShowTotalInputs(bool show);

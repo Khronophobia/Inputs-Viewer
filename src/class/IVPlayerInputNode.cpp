@@ -23,13 +23,13 @@ PlayerInputNode* PlayerInputNode::create(char const* playerText) {
 bool PlayerInputNode::init(char const* playerText) {
     if (!CCNode::init()) return false;
 
-    m_jumpButton = InputSprite::create(InputType::Jump);
+    m_jumpButton = InputSprite::create(PlayerButton::Jump);
     m_jumpButton->setPositionY(20.5f);
     this->addChild(m_jumpButton);
-    m_leftButton = InputSprite::create(InputType::Left);
+    m_leftButton = InputSprite::create(PlayerButton::Left);
     m_leftButton->setPositionX(-20.25f);
     this->addChild(m_leftButton);
-    m_rightButton = InputSprite::create(InputType::Right);
+    m_rightButton = InputSprite::create(PlayerButton::Right);
     m_rightButton->setPositionX(20.25f);
     this->addChild(m_rightButton);
 
@@ -45,13 +45,13 @@ bool PlayerInputNode::init(char const* playerText) {
     return true;
 }
 
-void PlayerInputNode::handleButton(bool down, InputType input, bool updateTotalInputs) {
+void PlayerInputNode::handleButton(bool down, PlayerButton input, bool updateTotalInputs) {
     switch (input) {
-    case InputType::Jump:
+    case PlayerButton::Jump:
         m_jumpButton->press(down, updateTotalInputs); break;
-    case InputType::Left:
+    case PlayerButton::Left:
         m_leftButton->press(down, updateTotalInputs); break;
-    case InputType::Right:
+    case PlayerButton::Right:
         m_rightButton->press(down, updateTotalInputs); break;
     }
 }

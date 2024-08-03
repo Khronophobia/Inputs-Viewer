@@ -1,6 +1,5 @@
 #pragma once
 #include "IVInputSprite.hpp"
-#include "IVInputType.hpp"
 #include <IVEvent.hpp>
 
 GEODE_NS_IV_BEGIN
@@ -10,7 +9,7 @@ public:
     PlayerInputNode();
     static PlayerInputNode* create(char const* playerText);
     bool init(char const* playerText);
-    void handleButton(bool down, InputType input, bool updateTotalInputs = true);
+    void handleButton(bool down, PlayerButton input, bool updateTotalInputs = true);
     void onSettingEvent(SettingEventType type);
     void setShowTotalInputs(bool show);
 protected:

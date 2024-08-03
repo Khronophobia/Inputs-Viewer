@@ -8,16 +8,16 @@ void IVGJBaseGameLayer::handleButton(bool down, int button, bool isP1) {
     auto ivLayer = static_cast<IVUILayer*>(m_uiLayer)->m_fields->m_ivLayer;
 
     if (isP1) {
-        ivLayer->m_p1InputNode->handleButton(down, static_cast<inputs_viewer::InputType>(button));
+        ivLayer->m_p1InputNode->handleButton(down, static_cast<PlayerButton>(button));
     } else {
-        ivLayer->m_p2InputNode->handleButton(down, static_cast<inputs_viewer::InputType>(button));
+        ivLayer->m_p2InputNode->handleButton(down, static_cast<PlayerButton>(button));
     }
 }
 
 static void resetInputNode(inputs_viewer::PlayerInputNode* node) {
-    node->handleButton(false, inputs_viewer::InputType::Jump, false);
-    node->handleButton(false, inputs_viewer::InputType::Left, false);
-    node->handleButton(false, inputs_viewer::InputType::Right, false);
+    node->handleButton(false, PlayerButton::Jump, false);
+    node->handleButton(false, PlayerButton::Left, false);
+    node->handleButton(false, PlayerButton::Right, false);
 }
 
 void IVGJBaseGameLayer::resetLevelVariables() {

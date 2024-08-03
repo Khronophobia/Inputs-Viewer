@@ -25,6 +25,13 @@ add_library(${PROJECT_NAME} SHARED
     src/hooks/PauseLayer.cpp
 )
 
+if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+    target_compile_options(${PROJECT_NAME} PRIVATE
+        -Wimplicit-fallthrough
+        -Werror
+    )
+endif()
+
 target_precompile_headers(${PROJECT_NAME} PRIVATE
     src/macros.hpp
 )

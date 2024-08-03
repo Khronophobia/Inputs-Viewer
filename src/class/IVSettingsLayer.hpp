@@ -13,7 +13,7 @@ public:
     void onExit() override;
 protected:
     bool setup(GJBaseGameLayer* gameLayer) override;
-    CCMenuItemToggler* createCheckbox(bool& checkValue, char const* text, std::optional<SettingEventType> postEvent, cocos2d::Anchor anchor, cocos2d::CCPoint const& offset = {});
+    CCMenuItemToggler* createCheckbox(bool& checkValue, char const* text, std::optional<SettingEventType> postEvent, cocos2d::Anchor anchor, cocos2d::CCPoint const& offset = {}, char const* description = nullptr);
 protected:
     InputsViewLayer* m_inputsLayer = nullptr;
     TransformSlider* m_p1Slider = nullptr;

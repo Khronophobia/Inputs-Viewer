@@ -8,7 +8,7 @@ using namespace geode::prelude;
 GEODE_NS_IV_BEGIN
 
 PlayerInputNode::PlayerInputNode()
-    : m_settingListener(this, &PlayerInputNode::onSettingEvent, IVSettingFilter(SettingEventType::TotalInputsCounter)) {}
+    : m_settingListener(this, &PlayerInputNode::onSettingEvent, IVSettingFilter(SettingEventType::KeyAppearance)) {}
 
 PlayerInputNode* PlayerInputNode::create(char const* playerText) {
     auto ret = new (std::nothrow) PlayerInputNode;

@@ -4,8 +4,8 @@ GEODE_NS_IV_BEGIN
 
 enum class SettingEventType {
     Color,
-    TotalInputsCounter,
-    RefreshView
+    KeyAppearance,
+    RefreshView,
 };
 
 class IVSettingEvent : public geode::Event {

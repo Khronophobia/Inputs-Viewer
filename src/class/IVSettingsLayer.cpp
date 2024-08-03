@@ -40,12 +40,16 @@ bool SettingsLayer::setup(GJBaseGameLayer* gameLayer) {
     m_p2Slider = TransformSlider::create(IVManager::get().m_p2Transform, m_inputsLayer->m_p2InputNode, "P2 Input", IVManager::getDefaultP2Transform);
     m_mainLayer->addChildAtPosition(m_p2Slider, Anchor::Center, ccp(80.f, 20.f));
 
-    this->createCheckbox(IVManager::get().m_showTotalInputs, "Show Total Inputs", SettingEventType::TotalInputsCounter, Anchor::Center, ccp(-70.f, -70.f));
+    this->createCheckbox(IVManager::get().m_showTotalInputs, "Show Total Inputs", SettingEventType::KeyAppearance, Anchor::Center, ccp(-90.f, -50.f));
+    this->createCheckbox(
+        IVManager::get().m_minimalIfNonPlatformer, "Hide L&R in Non-Platformer", SettingEventType::KeyAppearance, Anchor::Center, ccp(-90.f, -80.f),
+        "Hide the left and right buttons in non-platformer levels."
+    );
 
     return true;
 }
 
-CCMenuItemToggler* SettingsLayer::createCheckbox(bool& checkValue, char const* text, std::optional<SettingEventType> postEvent, Anchor anchor, CCPoint const& offset) {
+CCMenuItemToggler* SettingsLayer::createCheckbox(bool& checkValue, char const* text, std::optional<SettingEventType> postEvent, Anchor anchor, CCPoint const& offset, char const* description) {
     auto checkbox = CCMenuItemExt::createTogglerWithStandardSprites(0.7f, [this, &checkValue, postEvent](CCMenuItemToggler* btn) {
         checkValue = !btn->isToggled();
         if (postEvent) {
@@ -56,9 +60,20 @@ CCMenuItemToggler* SettingsLayer::createCheckbox(bool& checkValue, char const* t
     m_buttonMenu->addChildAtPosition(checkbox, anchor, offset);
 
     auto label = CCLabelBMFont::create(text, "bigFont.fnt");
-    label->setScale(0.5f);
+    label->limitLabelWidth(200.f, 0.5f, 0.1f);
     label->setAnchorPoint(ccp(0.f, 0.5f));
     m_mainLayer->addChildAtPosition(label, anchor, offset + ccp(14.f, 0.f));
+
+    if (description) {
+        auto infoSpr = CCSprite::createWithSpriteFrameName("GJ_infoIcon_001.png");
+        infoSpr->setScale(0.4f);
+
+        auto infoBtn = CCMenuItemExt::createSpriteExtra(infoSpr, [text, description](CCMenuItemSpriteExtra*) {
+            FLAlertLayer::create(text, description, "Ok")->show();
+        });
+
+        m_buttonMenu->addChildAtPosition(infoBtn, anchor, offset + ccp(-14.f, 14.f));
+    }
 
     return checkbox;
 }

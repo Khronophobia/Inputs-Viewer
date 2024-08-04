@@ -1,4 +1,4 @@
 # Inputs Viewer
-Shows player inputs during gameplay.
 
-<img src="logo.png" width="150" alt="the mod's logo" />
+Inspired by the Key Viewer feature in [ADOFAI Tweaks](https://github.com/PizzaLovers007/AdofaiTweaks). This mod adds an overlay that shows player inputs. Can be configured in the pause menu.\
+![Example](screenshots/thetower.png)

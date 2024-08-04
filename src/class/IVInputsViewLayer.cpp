@@ -36,7 +36,7 @@ void InputsViewLayer::refreshDisplay() {
     IVManager::get().m_p2Transform.applyTransform(m_p2InputNode);
 }
 
-void InputsViewLayer::onSettingEvent(SettingEventType type) {
+void InputsViewLayer::onSettingEvent(SettingEventType) {
     this->refreshDisplay();
 }
 

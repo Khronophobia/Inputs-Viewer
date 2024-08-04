@@ -51,7 +51,7 @@ bool SettingsLayer::setup(GJBaseGameLayer* gameLayer) {
 }
 
 CCMenuItemToggler* SettingsLayer::createCheckbox(bool& checkValue, char const* text, std::optional<SettingEventType> postEvent, Anchor anchor, CCPoint const& offset, char const* description) {
-    auto checkbox = CCMenuItemExt::createTogglerWithStandardSprites(0.7f, [this, &checkValue, postEvent](CCMenuItemToggler* btn) {
+    auto checkbox = CCMenuItemExt::createTogglerWithStandardSprites(0.7f, [&checkValue, postEvent](CCMenuItemToggler* btn) {
         checkValue = !btn->isToggled();
         if (postEvent) {
             IVSettingEvent(*postEvent).post();

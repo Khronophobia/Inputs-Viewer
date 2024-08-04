@@ -8,7 +8,7 @@
 	"name": "Inputs Viewer",
 	"version": "v1.1.0",
 	"developer": "Khronophobia",
-	"description": "",
+	"description": "Shows player inputs during gameplay.",
 	"repository": "https://github.com/Khronophobia/Inputs-Viewer",
 	"tags": [
 		"interface"

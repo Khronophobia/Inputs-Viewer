@@ -1,6 +1,10 @@
 #pragma once
-#include <Geode/loader/SettingEvent.hpp>
 #include <json/NodeTransform.hpp>
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-function"
+#include <Geode/loader/SettingEvent.hpp>
+#pragma GCC diagnostic pop
 
 GEODE_NS_IV_BEGIN
 

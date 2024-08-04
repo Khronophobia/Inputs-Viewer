@@ -140,7 +140,7 @@ void InputSprite::updateButtonAppearance() {
     m_shouldUpdateLayout = true;
 }
 
-void InputSprite::updateCPS(float dt) {
+void InputSprite::updateCPS(float) {
     m_cpsText->setString(std::to_string(m_clicksPerSecond).c_str());
     this->updateLabelWidth(m_cpsText);
 

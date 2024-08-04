@@ -1,6 +1,9 @@
 #include "IVManager.hpp"
 #include <IVEvent.hpp>
 
+// Initializer order doesn't matter here
+#pragma GCC diagnostic ignored "-Wreorder-ctor"
+
 using namespace geode::prelude;
 
 #define GEODE_IV_CONSTRUCT_COLOR(__col) \

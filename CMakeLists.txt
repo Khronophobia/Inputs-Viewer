@@ -29,6 +29,7 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
     target_compile_options(${PROJECT_NAME} PRIVATE
         -Wall
         -Wextra
+        -Wimplicit-fallthrough
         -Wno-overloaded-virtual
         -Werror=return-type
     )

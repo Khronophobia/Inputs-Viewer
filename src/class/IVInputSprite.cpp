@@ -54,7 +54,6 @@ bool InputSprite::init(PlayerButton input, char const* playerText) {
 }
 
 void InputSprite::press(bool pressed, bool updateInputs) {
-    m_pressed = pressed;
     if (pressed) {
         this->setBackgroundColor(IVManager::get().m_backgroundPressColor);
         this->setOutlineColor(IVManager::get().m_outlinePressColor);

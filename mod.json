@@ -26,6 +26,15 @@
 		}
 	],
 	"settings": {
+		"cps-calculation": {
+			"name": "CPS Calculation",
+			"type": "string",
+			"default": "Real-Time",
+			"one-of": [
+				"Real-Time",
+				"Per Second"
+			]
+		},
 		"background-press-color": {
 			"name": "Background Press Color",
 			"type": "rgba",

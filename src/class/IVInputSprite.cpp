@@ -7,6 +7,31 @@ using namespace geode::prelude;
 
 GEODE_NS_IV_BEGIN
 
+namespace CPSCalculationString {
+    [[maybe_unused]]
+    std::string_view constexpr RealTime = "Real-Time";
+    [[maybe_unused]]
+    std::string_view constexpr PerSecond = "Per Second";
+}
+
+static CPSCalculation convertCPSCalculation(std::string const& str) {
+    if (str == CPSCalculationString::RealTime) return CPSCalculation::RealTime;
+    else if (str == CPSCalculationString::PerSecond) return CPSCalculation::PerSecond;
+
+    return CPSCalculation::RealTime;
+}
+
+InputSprite::InputSprite()
+    : m_cpsSettingListener([this](std::string value) {
+        m_currentCPSCalculation = convertCPSCalculation(value);
+        if (IVManager::get().m_showCPS) {
+            this->setShowCPS(false);
+            this->setShowCPS(true);
+        }
+    },
+    GeodeSettingChangedFilter<std::string>(Mod::get()->getID(), "cps-calculation"))
+{}
+
 InputSprite* InputSprite::create(PlayerButton input, char const* playerText) {
     auto ret = new (std::nothrow) InputSprite;
     if (ret && ret->init(input, playerText)) {
@@ -20,6 +45,7 @@ InputSprite* InputSprite::create(PlayerButton input, char const* playerText) {
 bool InputSprite::init(PlayerButton input, char const* playerText) {
     if (!BackgroundSprite::init()) return false;
     this->setAnchorPoint(ccp(0.5f, 0.f));
+    m_currentCPSCalculation = convertCPSCalculation(Mod::get()->getSettingValue<std::string>("cps-calculation"));
 
     m_inputSymbol = CCSprite::create("symbol_arrow.png"_spr);
     this->addTextNode(m_inputSymbol);
@@ -60,21 +86,24 @@ void InputSprite::press(bool pressed, bool updateInputs) {
         this->setTextColor(IVManager::get().m_textPressColor);
         if (updateInputs) {
             ++m_totalInputs;
+            m_shouldUpdateTotalInputsDisplay = true;
             ++m_clicksPerSecond;
-            this->updateInputDisplay();
+            if (m_currentCPSCalculation == CPSCalculation::RealTime && IVManager::get().m_showCPS) {
+                m_displayedCPS = m_clicksPerSecond;
+                this->runAction(
+                    CCSequence::createWithTwoActions(
+                        CCDelayTime::create(1.f),
+                        CCCallFunc::create(this, callfunc_selector(InputSprite::subtractCPS)
+                    ))
+                );
+                m_shouldUpdateCPSDisplay = true;
+            }
         }
     } else {
         this->setBackgroundColor(IVManager::get().m_backgroundReleaseColor);
         this->setOutlineColor(IVManager::get().m_outlineReleaseColor);
         this->setTextColor(IVManager::get().m_textReleaseColor);
     }
-}
-
-void InputSprite::updateInputDisplay() {
-    if (!IVManager::get().m_showTotalInputs) return;
-
-    m_totalInputsText->setString(std::to_string(m_totalInputs).c_str());
-    this->updateLabelWidth(m_totalInputsText);
 }
 
 void InputSprite::setMinimal(bool minimal) {
@@ -87,7 +116,7 @@ void InputSprite::setMinimal(bool minimal) {
 void InputSprite::setShowTotalInputs(bool show) {
     if (show) {
         m_totalInputsText->setVisible(true);
-        this->updateInputDisplay();
+        m_shouldUpdateTotalInputsDisplay = true;
     } else {
         m_totalInputsText->setVisible(false);
     }
@@ -96,12 +125,16 @@ void InputSprite::setShowTotalInputs(bool show) {
 void InputSprite::setShowCPS(bool show) {
     if (show) {
         m_cpsText->setVisible(true);
-        this->schedule(schedule_selector(InputSprite::updateCPS), 1.f);
         m_clicksPerSecond = 0;
-        m_cpsText->setString("0");
+        m_displayedCPS = 0;
+        if (m_currentCPSCalculation == CPSCalculation::PerSecond) {
+            this->schedule(schedule_selector(InputSprite::cpsSchedule), 1.f);
+        }
+        m_shouldUpdateCPSDisplay = true;
     } else {
         m_cpsText->setVisible(false);
-        this->unschedule(schedule_selector(InputSprite::updateCPS));
+        this->stopAllActions();
+        this->unschedule(schedule_selector(InputSprite::cpsSchedule));
     }
 }
 
@@ -139,15 +172,46 @@ void InputSprite::updateButtonAppearance() {
     m_shouldUpdateLayout = true;
 }
 
-void InputSprite::updateCPS(float) {
-    m_cpsText->setString(std::to_string(m_clicksPerSecond).c_str());
-    this->updateLabelWidth(m_cpsText);
-
-    m_clicksPerSecond = 0;
-}
-
 void InputSprite::updateLabelWidth(CCLabelBMFont* font) {
     font->limitLabelWidth(16.f, m_textScale, 0.1f);
+}
+
+void InputSprite::cpsSchedule(float) {
+    m_displayedCPS = m_clicksPerSecond;
+    m_clicksPerSecond = 0;
+    m_shouldUpdateCPSDisplay = true;
+}
+
+void InputSprite::subtractCPS() {
+    --m_clicksPerSecond;
+    m_displayedCPS = m_clicksPerSecond;
+    m_shouldUpdateCPSDisplay = true;
+}
+
+void InputSprite::updateTotalInputsDisplay() {
+    if (!m_totalInputsText->isVisible()) return;
+
+    m_totalInputsText->setString(std::to_string(m_totalInputs).c_str());
+    this->updateLabelWidth(m_totalInputsText);
+}
+
+void InputSprite::updateCPSDisplay() {
+    if (!m_cpsText->isVisible()) return;
+
+    m_cpsText->setString(std::to_string(m_displayedCPS).c_str());
+    this->updateLabelWidth(m_cpsText);
+}
+
+void InputSprite::visit() {
+    if (m_shouldUpdateTotalInputsDisplay) {
+        this->updateTotalInputsDisplay();
+        m_shouldUpdateTotalInputsDisplay = false;
+    }
+    if (m_shouldUpdateCPSDisplay) {
+        this->updateCPSDisplay();
+        m_shouldUpdateCPSDisplay = false;
+    }
+    BackgroundSprite::visit();
 }
 
 GEODE_NS_IV_END

@@ -1,5 +1,4 @@
 #include "IVUtils.hpp"
-#include "class/IVBackgroundSprite.hpp"
 
 GEODE_NS_IV_BEGIN
 

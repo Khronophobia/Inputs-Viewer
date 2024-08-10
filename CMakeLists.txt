@@ -9,7 +9,7 @@ project(InputsViewer VERSION 1.0.0)
 add_library(${PROJECT_NAME} SHARED
     src/IVEvent.cpp
     src/IVUtils.cpp
-    src/json/serialize.cpp
+    src/json/Cocos.cpp
     src/json/NodeTransform.cpp
     src/class/IVManager.cpp
     src/class/IVBackgroundSprite.cpp

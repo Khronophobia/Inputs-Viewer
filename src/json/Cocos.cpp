@@ -1,6 +1,4 @@
 #include "Cocos.hpp"
-#include "NodeTransform.hpp"
-#include "helper.hpp"
 
 using namespace geode::prelude;
 
@@ -87,28 +85,4 @@ CCSize matjson::Serialize<CCSize>::from_json(matjson::Value const& value) {
     }
 
     throw matjson::JsonException("Expected json to be an object, array, or a number");
-}
-
-// NodeTransform
-
-bool matjson::Serialize<NodeTransform>::is_json(matjson::Value const& value) {
-    return verifyJsonObject<CCPoint>(value, "position") &&
-        verifyJsonObject<float>(value, "scale") &&
-        verifyJsonObject<bool>(value, "visible");
-}
-
-matjson::Value matjson::Serialize<NodeTransform>::to_json(NodeTransform const& value) {
-    return matjson::Object{
-        {"position", value.position},
-        {"scale", value.scale},
-        {"visible", value.isVisible}
-    };
-}
-
-NodeTransform matjson::Serialize<NodeTransform>::from_json(matjson::Value const& value) {
-    return {
-        .position = value["position"].as<CCPoint>(),
-        .scale = static_cast<float>(value["scale"].as_double()),
-        .isVisible = value["visible"].as_bool()
-    };
 }

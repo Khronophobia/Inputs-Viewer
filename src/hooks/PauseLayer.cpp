@@ -19,6 +19,10 @@ struct IVPauseLayer : Modify<IVPauseLayer, PauseLayer> {
         }
     }
     void onIVSetting(CCObject*) {
-        inputs_viewer::SettingsLayer::create(PlayLayer::get())->show();
+        if (PlayLayer::get()->m_levelSettings->m_platformerMode) {
+            inputs_viewer::SettingsLayer::create(inputs_viewer::LevelSettingsType::Platformer, PlayLayer::get())->show();
+        } else {
+            inputs_viewer::SettingsLayer::create(inputs_viewer::LevelSettingsType::Classic, PlayLayer::get())->show();
+        }
     }
 };

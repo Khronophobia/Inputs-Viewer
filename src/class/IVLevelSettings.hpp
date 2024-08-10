@@ -11,6 +11,11 @@ struct LevelSettings {
     bool hideLeftRight = false;
 };
 
+enum class LevelSettingsType {
+    Classic,
+    Platformer
+};
+
 GEODE_NS_IV_END
 
 template<>

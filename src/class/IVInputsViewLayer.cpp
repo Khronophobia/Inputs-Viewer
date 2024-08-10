@@ -5,12 +5,12 @@ using namespace geode::prelude;
 
 GEODE_NS_IV_BEGIN
 
-InputsViewLayer::InputsViewLayer(LevelSettings const& settings)
-    : m_currentSetting(settings)
+InputsViewLayer::InputsViewLayer(LevelSettingsType type)
+    : m_currentSetting(IVManager::get().getLevelSettings(type))
     , m_settingListener(this, &InputsViewLayer::onSettingEvent, IVSettingFilter(SettingEventType::RefreshView)) {}
 
-InputsViewLayer* InputsViewLayer::create(LevelSettings const& settings, GJBaseGameLayer* gameLayer) {
-    auto ret = new (std::nothrow) InputsViewLayer(settings);
+InputsViewLayer* InputsViewLayer::create(LevelSettingsType type, GJBaseGameLayer* gameLayer) {
+    auto ret = new (std::nothrow) InputsViewLayer(type);
     if (ret && ret->init(gameLayer)) {
         ret->autorelease();
         return ret;
@@ -32,10 +32,10 @@ bool InputsViewLayer::init(GJBaseGameLayer* gameLayer) {
     return true;
 }
 
-void InputsViewLayer::setLevelSettings(LevelSettings const& settings) {
-    m_currentSetting = settings;
-    m_p1InputNode->setLevelSettings(settings);
-    m_p2InputNode->setLevelSettings(settings);
+void InputsViewLayer::setLevelSettings(LevelSettingsType type) {
+    m_currentSetting = IVManager::get().getLevelSettings(type);
+    m_p1InputNode->setLevelSettings(IVManager::get().getLevelSettings(type));
+    m_p2InputNode->setLevelSettings(IVManager::get().getLevelSettings(type));
 
     this->refreshDisplay();
 }

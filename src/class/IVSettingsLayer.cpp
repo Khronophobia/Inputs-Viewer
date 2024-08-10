@@ -7,12 +7,13 @@ using namespace geode::prelude;
 
 GEODE_NS_IV_BEGIN
 
-SettingsLayer::SettingsLayer()
-    : m_currentSetting(IVManager::get().m_settingClassic)
+SettingsLayer::SettingsLayer(LevelSettingsType levelType)
+    : m_currentSettingType(levelType)
+    , m_currentSetting(IVManager::get().getLevelSettings(levelType))
 {}
 
-SettingsLayer* SettingsLayer::create(GJBaseGameLayer* gameLayer) {
-    auto ret = new (std::nothrow) SettingsLayer;
+SettingsLayer* SettingsLayer::create(LevelSettingsType levelType, GJBaseGameLayer* gameLayer) {
+    auto ret = new (std::nothrow) SettingsLayer(levelType);
     if (ret && ret->initAnchored(350.f, 260.f, gameLayer, "square02_001.png")) {
         ret->autorelease();
         return ret;
@@ -28,17 +29,27 @@ bool SettingsLayer::setup(GJBaseGameLayer* gameLayer) {
     m_noElasticity = true;
     m_bgSprite->setOpacity(63);
 
-    if (gameLayer) {
-        if (gameLayer->m_levelSettings->m_platformerMode) m_currentSetting = IVManager::get().m_settingPlatformer;
-    }
-
     auto modSettingsBtn = CCMenuItemSpriteExtra::create(
         CCSprite::createWithSpriteFrameName("GJ_optionsBtn02_001.png"),
         this, menu_selector(SettingsLayer::onModSettings)
     );
     m_buttonMenu->addChildAtPosition(modSettingsBtn, Anchor::TopRight, ccp(-3.f, -3.f));
 
-    m_inputsLayer = InputsViewLayer::create(m_currentSetting, gameLayer);
+    auto classicBtnSpr = ButtonSprite::create("Classic", "bigFont.fnt", "GJ_button_04.png");
+    classicBtnSpr->setScale(0.5f);
+    m_classicBtn = CCMenuItemSpriteExtra::create(
+        classicBtnSpr, this, menu_selector(SettingsLayer::onClassic)
+    );
+    m_buttonMenu->addChildAtPosition(m_classicBtn, Anchor::TopLeft, ccp(62.f, 0.f));
+
+    auto platformerBtnSpr = ButtonSprite::create("Platformer", "bigFont.fnt", "GJ_button_04.png");
+    platformerBtnSpr->setScale(0.5f);
+    m_platformerBtn = CCMenuItemSpriteExtra::create(
+        platformerBtnSpr, this, menu_selector(SettingsLayer::onPlatformer)
+    );
+    m_buttonMenu->addChildAtPosition(m_platformerBtn, Anchor::TopLeft, ccp(154.f, 0.f));
+
+    m_inputsLayer = InputsViewLayer::create(m_currentSettingType, gameLayer);
     m_inputsLayer->setPosition(CCDirector::get()->getWinSize() * 0.5f);
     this->insertBefore(m_inputsLayer, m_mainLayer);
 
@@ -55,11 +66,44 @@ bool SettingsLayer::setup(GJBaseGameLayer* gameLayer) {
         "Hide the left and right keys."
     );
 
-    this->updateSettingValues();
+    this->updateSettingNodes();
     return true;
 }
 
-void SettingsLayer::updateSettingValues() {
+void SettingsLayer::onClassic(CCObject*) {
+    this->setLevelSettings(LevelSettingsType::Classic);
+}
+
+void SettingsLayer::onPlatformer(CCObject*) {
+    this->setLevelSettings(LevelSettingsType::Platformer);
+}
+
+void SettingsLayer::setLevelSettings(LevelSettingsType type) {
+    m_currentSettingType = type;
+    m_currentSetting = IVManager::get().getLevelSettings(type);
+
+    m_inputsLayer->setLevelSettings(type);
+    m_p1Slider->setLevelSettings(type);
+    m_p2Slider->setLevelSettings(type);
+    this->updateSettingNodes();
+}
+
+void SettingsLayer::updateSettingNodes() {
+    switch (m_currentSettingType) {
+    case LevelSettingsType::Classic:
+        static_cast<ButtonSprite*>(m_classicBtn->getNormalImage())->updateBGImage("GJ_button_01.png");
+        m_classicBtn->setEnabled(false);
+        static_cast<ButtonSprite*>(m_platformerBtn->getNormalImage())->updateBGImage("GJ_button_04.png");
+        m_platformerBtn->setEnabled(true);
+        break;
+    case LevelSettingsType::Platformer:
+        static_cast<ButtonSprite*>(m_platformerBtn->getNormalImage())->updateBGImage("GJ_button_01.png");
+        m_platformerBtn->setEnabled(false);
+        static_cast<ButtonSprite*>(m_classicBtn->getNormalImage())->updateBGImage("GJ_button_04.png");
+        m_classicBtn->setEnabled(true);
+        break;
+    }
+
     m_totalInputsCheckbox->toggle(m_currentSetting.get().showTotalInputs);
     m_cpsCheckbox->toggle(m_currentSetting.get().showCPS);
     m_hideLRCheckbox->toggle(m_currentSetting.get().hideLeftRight);

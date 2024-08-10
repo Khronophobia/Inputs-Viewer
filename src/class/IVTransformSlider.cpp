@@ -73,13 +73,13 @@ bool TransformSlider::init(NodeTransform LevelSettings::* transform, PlayerInput
     m_buttonMenu->setPosition(0.f, m_textLabel->getPositionY());
     this->addChild(m_buttonMenu);
 
-    auto visibilityCheckbox = CCMenuItemToggler::createWithStandardSprites(
+    m_visibilityCheckbox = CCMenuItemToggler::createWithStandardSprites(
         this, menu_selector(TransformSlider::onSetVisibility),
         0.4f
     );
-    visibilityCheckbox->toggle((m_currentSetting.get().*m_transform).isVisible);
-    visibilityCheckbox->setPositionX(-m_textLabel->getScaledContentWidth() * 0.5f - 10.f);
-    m_buttonMenu->addChild(visibilityCheckbox);
+    m_visibilityCheckbox->toggle((m_currentSetting.get().*m_transform).isVisible);
+    m_visibilityCheckbox->setPositionX(-m_textLabel->getScaledContentWidth() * 0.5f - 10.f);
+    m_buttonMenu->addChild(m_visibilityCheckbox);
 
     if (m_defaultPosFunc) {
         auto resetSpr = CCSprite::createWithSpriteFrameName("GJ_replayBtn_001.png");
@@ -94,6 +94,18 @@ bool TransformSlider::init(NodeTransform LevelSettings::* transform, PlayerInput
     }
 
     return true;
+}
+
+void TransformSlider::setLevelSettings(LevelSettingsType type) {
+    m_currentSetting = IVManager::get().getLevelSettings(type);
+    this->updateSettingNodes();
+}
+
+void TransformSlider::updateSettingNodes() {
+    m_xPosSlider->setValue((m_currentSetting.get().*m_transform).position.x, false);
+    m_yPosSlider->setValue((m_currentSetting.get().*m_transform).position.y, false);
+    m_scaleSlider->setValue((m_currentSetting.get().*m_transform).scale);
+    m_visibilityCheckbox->toggle((m_currentSetting.get().*m_transform).isVisible);
 }
 
 void TransformSlider::onDefaultPosition(CCObject*) {

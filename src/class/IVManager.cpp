@@ -74,6 +74,13 @@ NodeTransform IVManager::getDefaultP2Transform() {
     };
 }
 
+LevelSettings& IVManager::getLevelSettings(LevelSettingsType type) noexcept {
+    switch (type) {
+        case LevelSettingsType::Classic: return m_settingClassic;
+        case LevelSettingsType::Platformer: return m_settingPlatformer;
+    }
+}
+
 $on_mod(DataSaved) {
     Mod::get()->setSavedValue("classic", IVManager::get().m_settingClassic);
     Mod::get()->setSavedValue("platformer", IVManager::get().m_settingPlatformer);

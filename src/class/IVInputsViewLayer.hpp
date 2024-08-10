@@ -1,18 +1,17 @@
 #pragma once
 #include "IVPlayerInputNode.hpp"
+#include "IVLevelSettings.hpp"
 #include <IVEvent.hpp>
 
 GEODE_NS_IV_BEGIN
 
-struct LevelSettings;
-
 class InputsViewLayer : public cocos2d::CCLayer {
 public:
-    InputsViewLayer(LevelSettings const& settings);
-    static InputsViewLayer* create(LevelSettings const& settings, GJBaseGameLayer* gameLayer);
+    InputsViewLayer(LevelSettingsType type);
+    static InputsViewLayer* create(LevelSettingsType type, GJBaseGameLayer* gameLayer);
     bool init(GJBaseGameLayer* gameLayer);
 public:
-    void setLevelSettings(LevelSettings const& settings);
+    void setLevelSettings(LevelSettingsType type);
     void refreshDisplay();
     void onSettingEvent(SettingEventType type);
 public:

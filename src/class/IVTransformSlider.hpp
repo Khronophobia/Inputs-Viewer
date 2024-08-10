@@ -1,7 +1,7 @@
 #pragma once
 #include "IVPlayerInputNode.hpp"
 #include "IVFloatSlider.hpp"
-#include <json/NodeTransform.hpp>
+#include "IVLevelSettings.hpp"
 
 GEODE_NS_IV_BEGIN
 
@@ -13,8 +13,11 @@ public:
     static TransformSlider* create(LevelSettings& setting, NodeTransform LevelSettings::* transform, PlayerInputNode* inputNode, char const* text, geode::utils::MiniFunction<NodeTransform()>&& defaultPosFunc);
     bool init(NodeTransform LevelSettings::* transform, PlayerInputNode* inputNode, char const* text, geode::utils::MiniFunction<NodeTransform()>&& defaultPosFunc);
 public:
+    void setLevelSettings(LevelSettingsType type);
     void onDefaultPosition(cocos2d::CCObject*);
     void onSetVisibility(cocos2d::CCObject*);
+protected:
+    void updateSettingNodes();
 protected:
     std::reference_wrapper<LevelSettings> m_currentSetting;
     NodeTransform LevelSettings::* m_transform;
@@ -22,6 +25,7 @@ protected:
     FloatSlider* m_xPosSlider = nullptr;
     FloatSlider* m_yPosSlider = nullptr;
     FloatSlider* m_scaleSlider = nullptr;
+    CCMenuItemToggler* m_visibilityCheckbox = nullptr;
     cocos2d::CCLabelBMFont* m_textLabel = nullptr;
     cocos2d::CCMenu* m_buttonMenu = nullptr;
     geode::utils::MiniFunction<NodeTransform()> m_defaultPosFunc = nullptr;

@@ -1,5 +1,4 @@
 #include "IVPlayerInputNode.hpp"
-#include "IVManager.hpp"
 #include <IVConstants.hpp>
 #include <IVUtils.hpp>
 
@@ -11,9 +10,9 @@ PlayerInputNode::PlayerInputNode(LevelSettings const& setting)
     : m_currentSetting(setting)
     , m_settingListener([this](auto) { this->refreshAppearance(); }, IVSettingFilter(SettingEventType::KeyAppearance)) {}
 
-PlayerInputNode* PlayerInputNode::create(LevelSettings const& setting, GJBaseGameLayer* gameLayer, char const* playerText) {
+PlayerInputNode* PlayerInputNode::create(LevelSettings const& setting, char const* playerText) {
     auto ret = new (std::nothrow) PlayerInputNode(setting);
-    if (ret && ret->init(gameLayer, playerText)) {
+    if (ret && ret->init(playerText)) {
         ret->autorelease();
         return ret;
     }
@@ -21,9 +20,8 @@ PlayerInputNode* PlayerInputNode::create(LevelSettings const& setting, GJBaseGam
     return nullptr;
 }
 
-bool PlayerInputNode::init(GJBaseGameLayer* gameLayer, char const* playerText) {
+bool PlayerInputNode::init(char const* playerText) {
     if (!CCNode::init()) return false;
-    m_gameLayer = gameLayer;
 
     m_jumpButton = InputSprite::create(m_currentSetting, PlayerButton::Jump, playerText);
     m_jumpButton->setPositionY(20.5f);

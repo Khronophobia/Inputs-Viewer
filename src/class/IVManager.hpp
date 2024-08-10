@@ -28,13 +28,6 @@ public:
 
     LevelSettings m_settingClassic;
     LevelSettings m_settingPlatformer;
-#if 0
-    NodeTransform m_p1Transform;
-    NodeTransform m_p2Transform;
-    bool m_showTotalInputs;
-    bool m_showCPS;
-    bool m_minimalIfNonPlatformer;
-#endif
 protected:
     RGBASettingListener m_backgroundPressListener;
     RGBASettingListener m_backgroundReleaseListener;

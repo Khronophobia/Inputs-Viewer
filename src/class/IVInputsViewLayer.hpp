@@ -8,8 +8,8 @@ GEODE_NS_IV_BEGIN
 class InputsViewLayer : public cocos2d::CCLayer {
 public:
     InputsViewLayer(LevelSettingsType type);
-    static InputsViewLayer* create(LevelSettingsType type, GJBaseGameLayer* gameLayer);
-    bool init(GJBaseGameLayer* gameLayer);
+    static InputsViewLayer* create(LevelSettingsType type);
+    bool init() override;
 public:
     void setLevelSettings(LevelSettingsType type);
     void refreshDisplay();

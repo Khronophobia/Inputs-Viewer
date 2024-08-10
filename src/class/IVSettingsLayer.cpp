@@ -12,9 +12,9 @@ SettingsLayer::SettingsLayer(LevelSettingsType levelType)
     , m_currentSetting(IVManager::get().getLevelSettings(levelType))
 {}
 
-SettingsLayer* SettingsLayer::create(LevelSettingsType levelType, GJBaseGameLayer* gameLayer) {
+SettingsLayer* SettingsLayer::create(LevelSettingsType levelType) {
     auto ret = new (std::nothrow) SettingsLayer(levelType);
-    if (ret && ret->initAnchored(350.f, 260.f, gameLayer, "square02_001.png")) {
+    if (ret && ret->initAnchored(350.f, 260.f, "square02_001.png")) {
         ret->autorelease();
         return ret;
     }
@@ -22,7 +22,7 @@ SettingsLayer* SettingsLayer::create(LevelSettingsType levelType, GJBaseGameLaye
     return nullptr;
 }
 
-bool SettingsLayer::setup(GJBaseGameLayer* gameLayer) {
+bool SettingsLayer::setup() {
     this->setTitle("Inputs Viewer Config");
     this->setColor({127, 127, 127});
     this->setOpacity(255);
@@ -49,7 +49,7 @@ bool SettingsLayer::setup(GJBaseGameLayer* gameLayer) {
     );
     m_buttonMenu->addChildAtPosition(m_platformerBtn, Anchor::TopLeft, ccp(154.f, 0.f));
 
-    m_inputsLayer = InputsViewLayer::create(m_currentSettingType, gameLayer);
+    m_inputsLayer = InputsViewLayer::create(m_currentSettingType);
     m_inputsLayer->setPosition(CCDirector::get()->getWinSize() * 0.5f);
     this->insertBefore(m_inputsLayer, m_mainLayer);
 

@@ -7,6 +7,10 @@ using namespace geode::prelude;
 
 GEODE_NS_IV_BEGIN
 
+SettingsLayer::SettingsLayer()
+    : m_currentSetting(IVManager::get().m_settingClassic)
+{}
+
 SettingsLayer* SettingsLayer::create(GJBaseGameLayer* gameLayer) {
     auto ret = new (std::nothrow) SettingsLayer;
     if (ret && ret->initAnchored(350.f, 260.f, gameLayer, "square02_001.png")) {
@@ -24,40 +28,50 @@ bool SettingsLayer::setup(GJBaseGameLayer* gameLayer) {
     m_noElasticity = true;
     m_bgSprite->setOpacity(63);
 
+    if (gameLayer) {
+        if (gameLayer->m_levelSettings->m_platformerMode) m_currentSetting = IVManager::get().m_settingPlatformer;
+    }
+
     auto modSettingsBtn = CCMenuItemSpriteExtra::create(
         CCSprite::createWithSpriteFrameName("GJ_optionsBtn02_001.png"),
         this, menu_selector(SettingsLayer::onModSettings)
     );
     m_buttonMenu->addChildAtPosition(modSettingsBtn, Anchor::TopRight, ccp(-3.f, -3.f));
 
-    m_inputsLayer = InputsViewLayer::create(gameLayer);
+    m_inputsLayer = InputsViewLayer::create(m_currentSetting, gameLayer);
     m_inputsLayer->setPosition(CCDirector::get()->getWinSize() * 0.5f);
     this->insertBefore(m_inputsLayer, m_mainLayer);
 
-    m_p1Slider = TransformSlider::create(IVManager::get().m_p1Transform, m_inputsLayer->m_p1InputNode, "P1 Input", IVManager::getDefaultP1Transform);
+    m_p1Slider = TransformSlider::create(m_currentSetting, &LevelSettings::p1Transform, m_inputsLayer->m_p1InputNode, "P1 Input", IVManager::getDefaultP1Transform);
     m_mainLayer->addChildAtPosition(m_p1Slider, Anchor::Center, ccp(-80.f, 20.f));
 
-    m_p2Slider = TransformSlider::create(IVManager::get().m_p2Transform, m_inputsLayer->m_p2InputNode, "P2 Input", IVManager::getDefaultP2Transform);
+    m_p2Slider = TransformSlider::create(m_currentSetting, &LevelSettings::p2Transform, m_inputsLayer->m_p2InputNode, "P2 Input", IVManager::getDefaultP2Transform);
     m_mainLayer->addChildAtPosition(m_p2Slider, Anchor::Center, ccp(80.f, 20.f));
 
-    this->createCheckbox(IVManager::get().m_showTotalInputs, "Show Total Inputs", SettingEventType::KeyAppearance, Anchor::Center, ccp(-90.f, -50.f));
-    this->createCheckbox(IVManager::get().m_showCPS, "Show Clicks per Seconds", SettingEventType::KeyAppearance, Anchor::Center, ccp(-90.f, -80.f));
-    this->createCheckbox(
-        IVManager::get().m_minimalIfNonPlatformer, "Hide L&R in Non-Platformer", SettingEventType::KeyAppearance, Anchor::Center, ccp(-90.f, -110.f),
-        "Hide the left and right buttons in non-platformer levels."
+    m_totalInputsCheckbox = this->createCheckbox(&LevelSettings::showTotalInputs, "Show Total Inputs", SettingEventType::KeyAppearance, Anchor::Center, ccp(-90.f, -50.f));
+    m_cpsCheckbox = this->createCheckbox(&LevelSettings::showCPS, "Show Clicks per Seconds", SettingEventType::KeyAppearance, Anchor::Center, ccp(-90.f, -80.f));
+    m_hideLRCheckbox = this->createCheckbox(
+        &LevelSettings::hideLeftRight, "Hide L&R Keys", SettingEventType::KeyAppearance, Anchor::Center, ccp(-90.f, -110.f),
+        "Hide the left and right keys."
     );
 
+    this->updateSettingValues();
     return true;
 }
 
-CCMenuItemToggler* SettingsLayer::createCheckbox(bool& checkValue, char const* text, std::optional<SettingEventType> postEvent, Anchor anchor, CCPoint const& offset, char const* description) {
-    auto checkbox = CCMenuItemExt::createTogglerWithStandardSprites(0.7f, [&checkValue, postEvent](CCMenuItemToggler* btn) {
-        checkValue = !btn->isToggled();
+void SettingsLayer::updateSettingValues() {
+    m_totalInputsCheckbox->toggle(m_currentSetting.get().showTotalInputs);
+    m_cpsCheckbox->toggle(m_currentSetting.get().showCPS);
+    m_hideLRCheckbox->toggle(m_currentSetting.get().hideLeftRight);
+}
+
+CCMenuItemToggler* SettingsLayer::createCheckbox(bool LevelSettings::* member, char const* text, std::optional<SettingEventType> postEvent, Anchor anchor, CCPoint const& offset, char const* description) {
+    auto checkbox = CCMenuItemExt::createTogglerWithStandardSprites(0.7f, [this, member, postEvent](CCMenuItemToggler* btn) {
+        m_currentSetting.get().*member = !btn->isToggled();
         if (postEvent) {
             IVSettingEvent(*postEvent).post();
         }
     });
-    checkbox->toggle(checkValue);
     m_buttonMenu->addChildAtPosition(checkbox, anchor, offset);
 
     auto label = CCLabelBMFont::create(text, "bigFont.fnt");

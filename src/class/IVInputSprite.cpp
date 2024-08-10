@@ -21,10 +21,11 @@ static CPSCalculation convertCPSCalculation(std::string const& str) {
     return CPSCalculation::RealTime;
 }
 
-InputSprite::InputSprite()
-    : m_cpsSettingListener([this](std::string value) {
+InputSprite::InputSprite(LevelSettings const& setting)
+    : m_currentSetting(setting)
+    , m_cpsSettingListener([this](std::string value) {
         m_currentCPSCalculation = convertCPSCalculation(value);
-        if (IVManager::get().m_showCPS) {
+        if (m_currentSetting.get().showCPS) {
             this->setShowCPS(false);
             this->setShowCPS(true);
         }
@@ -32,8 +33,8 @@ InputSprite::InputSprite()
     GeodeSettingChangedFilter<std::string>(Mod::get()->getID(), "cps-calculation"))
 {}
 
-InputSprite* InputSprite::create(PlayerButton input, char const* playerText) {
-    auto ret = new (std::nothrow) InputSprite;
+InputSprite* InputSprite::create(LevelSettings const& setting, PlayerButton input, char const* playerText) {
+    auto ret = new (std::nothrow) InputSprite(setting);
     if (ret && ret->init(input, playerText)) {
         ret->autorelease();
         return ret;
@@ -88,7 +89,7 @@ void InputSprite::press(bool pressed, bool updateInputs) {
             ++m_totalInputs;
             m_shouldUpdateTotalInputsDisplay = true;
             ++m_clicksPerSecond;
-            if (m_currentCPSCalculation == CPSCalculation::RealTime && IVManager::get().m_showCPS) {
+            if (m_currentCPSCalculation == CPSCalculation::RealTime && m_currentSetting.get().showCPS) {
                 m_displayedCPS = m_clicksPerSecond;
                 this->runAction(
                     CCSequence::createWithTwoActions(
@@ -139,7 +140,7 @@ void InputSprite::setShowCPS(bool show) {
 }
 
 void InputSprite::updateButtonAppearance() {
-    if (IVManager::get().m_showTotalInputs || IVManager::get().m_showCPS) {
+    if (m_currentSetting.get().showTotalInputs || m_currentSetting.get().showCPS) {
         static_cast<AnchorLayoutOptions*>(m_inputSymbol->getLayoutOptions())
             ->setOffset(ccp(0.f, -7.5f));
         if (m_playerText) static_cast<AnchorLayoutOptions*>(m_playerText->getLayoutOptions())
@@ -153,13 +154,13 @@ void InputSprite::updateButtonAppearance() {
         this->setContentHeight(constants::buttonHeightNormal);
     }
 
-    if (IVManager::get().m_showTotalInputs ^ IVManager::get().m_showCPS) {
+    if (m_currentSetting.get().showTotalInputs ^ m_currentSetting.get().showCPS) {
         m_textScale = 0.55f;
         static_cast<AnchorLayoutOptions*>(m_totalInputsText->getLayoutOptions())
             ->setOffset(ccp(0.f, 8.f));
         static_cast<AnchorLayoutOptions*>(m_cpsText->getLayoutOptions())
             ->setOffset(ccp(0.f, 8.f));
-    } else if (IVManager::get().m_showTotalInputs && IVManager::get().m_showCPS) {
+    } else if (m_currentSetting.get().showTotalInputs && m_currentSetting.get().showCPS) {
         m_textScale = 0.45f;
         static_cast<AnchorLayoutOptions*>(m_totalInputsText->getLayoutOptions())
             ->setOffset(ccp(0.f, 11.5f));
@@ -170,6 +171,10 @@ void InputSprite::updateButtonAppearance() {
     this->updateLabelWidth(m_totalInputsText);
     this->updateLabelWidth(m_cpsText);
     m_shouldUpdateLayout = true;
+}
+
+void InputSprite::setLevelSettings(LevelSettings const& settings) {
+    m_currentSetting = settings;
 }
 
 void InputSprite::updateLabelWidth(CCLabelBMFont* font) {

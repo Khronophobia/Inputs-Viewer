@@ -4,7 +4,7 @@
 
 using namespace geode::prelude;
 
-void NodeTransform::applyTransform(CCNode* node) {
+void NodeTransform::applyTransform(CCNode* node) const {
     node->setPosition(position);
     node->setScale(scale);
     node->setVisible(isVisible);

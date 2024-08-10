@@ -7,11 +7,12 @@ using namespace geode::prelude;
 
 GEODE_NS_IV_BEGIN
 
-PlayerInputNode::PlayerInputNode()
-    : m_settingListener(this, &PlayerInputNode::onRefreshAppearance, IVSettingFilter(SettingEventType::KeyAppearance)) {}
+PlayerInputNode::PlayerInputNode(LevelSettings const& setting)
+    : m_currentSetting(setting)
+    , m_settingListener([this](auto) { this->refreshAppearance(); }, IVSettingFilter(SettingEventType::KeyAppearance)) {}
 
-PlayerInputNode* PlayerInputNode::create(GJBaseGameLayer* gameLayer, char const* playerText) {
-    auto ret = new (std::nothrow) PlayerInputNode;
+PlayerInputNode* PlayerInputNode::create(LevelSettings const& setting, GJBaseGameLayer* gameLayer, char const* playerText) {
+    auto ret = new (std::nothrow) PlayerInputNode(setting);
     if (ret && ret->init(gameLayer, playerText)) {
         ret->autorelease();
         return ret;
@@ -24,13 +25,13 @@ bool PlayerInputNode::init(GJBaseGameLayer* gameLayer, char const* playerText) {
     if (!CCNode::init()) return false;
     m_gameLayer = gameLayer;
 
-    m_jumpButton = InputSprite::create(PlayerButton::Jump, playerText);
+    m_jumpButton = InputSprite::create(m_currentSetting, PlayerButton::Jump, playerText);
     m_jumpButton->setPositionY(20.5f);
     this->addChild(m_jumpButton);
-    m_leftButton = InputSprite::create(PlayerButton::Left, nullptr);
+    m_leftButton = InputSprite::create(m_currentSetting, PlayerButton::Left, nullptr);
     m_leftButton->setPositionX(-constants::buttonWidth - 0.25f);
     this->addChild(m_leftButton);
-    m_rightButton = InputSprite::create(PlayerButton::Right, nullptr);
+    m_rightButton = InputSprite::create(m_currentSetting, PlayerButton::Right, nullptr);
     m_rightButton->setPositionX(constants::buttonWidth + 0.25f);
     this->addChild(m_rightButton);
 
@@ -43,7 +44,7 @@ bool PlayerInputNode::init(GJBaseGameLayer* gameLayer, char const* playerText) {
     m_playerIndicator->addTextNode(m_playerIndicatorText);
     m_playerIndicator->addChildAtPosition(m_playerIndicatorText, Anchor::Center);
 
-    this->onRefreshAppearance(SettingEventType::KeyAppearance);
+    this->refreshAppearance();
     return true;
 }
 
@@ -59,9 +60,7 @@ void PlayerInputNode::handleButton(bool down, PlayerButton input, bool updateTot
 }
 
 bool PlayerInputNode::isMinimalMode() const {
-    if (!m_gameLayer) return IVManager::get().m_minimalIfNonPlatformer;
-
-    return !m_gameLayer->m_levelSettings->m_platformerMode && IVManager::get().m_minimalIfNonPlatformer;
+    return m_currentSetting.get().hideLeftRight;
 }
 
 void PlayerInputNode::setShowTotalInputs(bool show) {
@@ -76,15 +75,36 @@ void PlayerInputNode::setShowCPS(bool show) {
     m_rightButton->setShowCPS(show);
 }
 
-void PlayerInputNode::updateAppearance() {
-    m_jumpButton->updateButtonAppearance();
-    m_leftButton->updateButtonAppearance();
-    m_rightButton->updateButtonAppearance();
+void PlayerInputNode::releaseAllButtons() {
+    m_jumpButton->press(false, false);
+    m_leftButton->press(false, false);
+    m_rightButton->press(false, false);
+}
 
+void PlayerInputNode::setLevelSettings(LevelSettings const& settings) {
+    m_currentSetting = settings;
+    m_jumpButton->setLevelSettings(settings);
+    m_leftButton->setLevelSettings(settings);
+    m_rightButton->setLevelSettings(settings);
+
+    this->refreshAppearance();
+}
+
+void PlayerInputNode::refreshAppearance() {
     if (this->isMinimalMode()) {
+        m_jumpButton->setMinimal(true);
+        m_playerIndicator->setVisible(false);
+        m_rightButton->setVisible(false);
+        m_leftButton->setVisible(false);
+
         m_jumpButton->setPositionY(0.f);
     } else {
-        if (IVManager::get().m_showTotalInputs || IVManager::get().m_showCPS) {
+        m_jumpButton->setMinimal(false);
+        m_playerIndicator->setVisible(true);
+        m_rightButton->setVisible(true);
+        m_leftButton->setVisible(true);
+
+        if (m_currentSetting.get().showTotalInputs || m_currentSetting.get().showCPS) {
             m_jumpButton->setPositionY(constants::buttonHeightTall + 0.5f);
             m_playerIndicator->setContentHeight(constants::buttonHeightTall);
         } else {
@@ -92,30 +112,12 @@ void PlayerInputNode::updateAppearance() {
             m_playerIndicator->setContentHeight(constants::buttonHeightNormal);
         }
     }
-}
+    this->setShowTotalInputs(m_currentSetting.get().showTotalInputs);
+    this->setShowCPS(m_currentSetting.get().showCPS);
 
-void PlayerInputNode::releaseAllButtons() {
-    m_jumpButton->press(false, false);
-    m_leftButton->press(false, false);
-    m_rightButton->press(false, false);
-}
-
-void PlayerInputNode::onRefreshAppearance(SettingEventType) {
-    if (this->isMinimalMode()) {
-        m_jumpButton->setMinimal(true);
-        m_playerIndicator->setVisible(false);
-        m_rightButton->setVisible(false);
-        m_leftButton->setVisible(false);
-    } else {
-        m_jumpButton->setMinimal(false);
-        m_playerIndicator->setVisible(true);
-        m_rightButton->setVisible(true);
-        m_leftButton->setVisible(true);
-    }
-    this->setShowTotalInputs(IVManager::get().m_showTotalInputs);
-    this->setShowCPS(IVManager::get().m_showCPS);
-
-    this->updateAppearance();
+    m_jumpButton->updateButtonAppearance();
+    m_leftButton->updateButtonAppearance();
+    m_rightButton->updateButtonAppearance();
 }
 
 GEODE_NS_IV_END

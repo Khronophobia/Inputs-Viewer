@@ -6,7 +6,7 @@ struct NodeTransform {
     bool isVisible = true;
 
     // Apply transform to a node
-    void applyTransform(cocos2d::CCNode* node);
+    void applyTransform(cocos2d::CCNode* node) const;
     // Set transform from a node
     void setValues(cocos2d::CCNode* node);
 };

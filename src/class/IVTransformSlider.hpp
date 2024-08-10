@@ -5,16 +5,19 @@
 
 GEODE_NS_IV_BEGIN
 
+struct LevelSettings;
+
 class TransformSlider : public cocos2d::CCNode {
 public:
-    TransformSlider(NodeTransform& transform);
-    static TransformSlider* create(NodeTransform& transform, PlayerInputNode* inputNode, char const* text, geode::utils::MiniFunction<NodeTransform()>&& defaultPosFunc);
-    bool init(PlayerInputNode* inputNode, char const* text, geode::utils::MiniFunction<NodeTransform()>&& defaultPosFunc);
+    TransformSlider(LevelSettings& setting);
+    static TransformSlider* create(LevelSettings& setting, NodeTransform LevelSettings::* transform, PlayerInputNode* inputNode, char const* text, geode::utils::MiniFunction<NodeTransform()>&& defaultPosFunc);
+    bool init(NodeTransform LevelSettings::* transform, PlayerInputNode* inputNode, char const* text, geode::utils::MiniFunction<NodeTransform()>&& defaultPosFunc);
 public:
     void onDefaultPosition(cocos2d::CCObject*);
     void onSetVisibility(cocos2d::CCObject*);
 protected:
-    NodeTransform& m_transform;
+    std::reference_wrapper<LevelSettings> m_currentSetting;
+    NodeTransform LevelSettings::* m_transform;
     PlayerInputNode* m_inputNode = nullptr;
     FloatSlider* m_xPosSlider = nullptr;
     FloatSlider* m_yPosSlider = nullptr;

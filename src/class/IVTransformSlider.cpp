@@ -1,15 +1,16 @@
 #include "IVTransformSlider.hpp"
+#include "IVManager.hpp"
 
 using namespace geode::prelude;
 
 GEODE_NS_IV_BEGIN
 
-TransformSlider::TransformSlider(NodeTransform& transform)
-    : m_transform(transform) {}
+TransformSlider::TransformSlider(LevelSettings& setting)
+    : m_currentSetting(setting) {}
 
-TransformSlider* TransformSlider::create(NodeTransform& transform, PlayerInputNode* inputNode, char const* text, MiniFunction<NodeTransform()>&& defaultPosFunc) {
-    auto ret = new (std::nothrow) TransformSlider(transform);
-    if (ret && ret->init(inputNode, text, std::move(defaultPosFunc))) {
+TransformSlider* TransformSlider::create(LevelSettings& setting, NodeTransform LevelSettings::* transform, PlayerInputNode* inputNode, char const* text, MiniFunction<NodeTransform()>&& defaultPosFunc) {
+    auto ret = new (std::nothrow) TransformSlider(setting);
+    if (ret && ret->init(transform, inputNode, text, std::move(defaultPosFunc))) {
         ret->autorelease();
         return ret;
     }
@@ -18,19 +19,20 @@ TransformSlider* TransformSlider::create(NodeTransform& transform, PlayerInputNo
     return nullptr;
 }
 
-bool TransformSlider::init(PlayerInputNode* inputNode, char const* text, MiniFunction<NodeTransform()>&& defaultPosFunc) {
+bool TransformSlider::init(NodeTransform LevelSettings::* transform, PlayerInputNode* inputNode, char const* text, MiniFunction<NodeTransform()>&& defaultPosFunc) {
+    m_transform = transform;
     m_inputNode = inputNode;
     m_defaultPosFunc = std::move(defaultPosFunc);
     auto winSize = CCDirector::get()->getWinSize();
 
     m_xPosSlider = FloatSlider::create(
         "X:",
-        m_transform.position.x,
+        (m_currentSetting.get().*m_transform).position.x,
         -winSize.width * 0.5f,
         winSize.width * 0.5f,
         [this](FloatSlider* slider) {
-            m_transform.position.x = slider->getValue();
-            m_transform.applyTransform(m_inputNode);
+            (m_currentSetting.get().*m_transform).position.x = slider->getValue();
+            (m_currentSetting.get().*m_transform).applyTransform(m_inputNode);
         }
     );
     m_xPosSlider->setPositionY(18.f);
@@ -38,12 +40,12 @@ bool TransformSlider::init(PlayerInputNode* inputNode, char const* text, MiniFun
 
     m_yPosSlider = FloatSlider::create(
         "Y:",
-        m_transform.position.y,
+        (m_currentSetting.get().*m_transform).position.y,
         -winSize.height * 0.5f,
         winSize.height * 0.5f,
         [this](FloatSlider* slider) {
-            m_transform.position.y = slider->getValue();
-            m_transform.applyTransform(m_inputNode);
+            (m_currentSetting.get().*m_transform).position.y = slider->getValue();
+            (m_currentSetting.get().*m_transform).applyTransform(m_inputNode);
         }
     );
     m_yPosSlider->setPositionY(-12.f);
@@ -51,12 +53,12 @@ bool TransformSlider::init(PlayerInputNode* inputNode, char const* text, MiniFun
 
     m_scaleSlider = FloatSlider::create(
         "Scale:",
-        m_transform.scale,
+        (m_currentSetting.get().*m_transform).scale,
         0.f,
         2.f,
         [this](FloatSlider* slider) {
-            m_transform.scale = slider->getValue();
-            m_transform.applyTransform(m_inputNode);
+            (m_currentSetting.get().*m_transform).scale = slider->getValue();
+            (m_currentSetting.get().*m_transform).applyTransform(m_inputNode);
         }
     );
     m_scaleSlider->setPositionY(-42.f);
@@ -75,7 +77,7 @@ bool TransformSlider::init(PlayerInputNode* inputNode, char const* text, MiniFun
         this, menu_selector(TransformSlider::onSetVisibility),
         0.4f
     );
-    visibilityCheckbox->toggle(m_transform.isVisible);
+    visibilityCheckbox->toggle((m_currentSetting.get().*m_transform).isVisible);
     visibilityCheckbox->setPositionX(-m_textLabel->getScaledContentWidth() * 0.5f - 10.f);
     m_buttonMenu->addChild(visibilityCheckbox);
 
@@ -101,11 +103,11 @@ void TransformSlider::onDefaultPosition(CCObject*) {
         "No", "Yes",
         [this](auto, bool btn2) {
             if (btn2) {
-                m_transform = m_defaultPosFunc();
-                m_xPosSlider->setValue(m_transform.position.x);
-                m_yPosSlider->setValue(m_transform.position.y);
-                m_scaleSlider->setValue(m_transform.scale);
-                m_transform.applyTransform(m_inputNode);
+                m_currentSetting.get().*m_transform = m_defaultPosFunc();
+                m_xPosSlider->setValue((m_currentSetting.get().*m_transform).position.x);
+                m_yPosSlider->setValue((m_currentSetting.get().*m_transform).position.y);
+                m_scaleSlider->setValue((m_currentSetting.get().*m_transform).scale);
+                (m_currentSetting.get().*m_transform).applyTransform(m_inputNode);
             }
         }
     );
@@ -113,8 +115,8 @@ void TransformSlider::onDefaultPosition(CCObject*) {
 
 void TransformSlider::onSetVisibility(CCObject* sender) {
     auto btn = static_cast<CCMenuItemToggler*>(sender);
-    m_transform.isVisible = !btn->isToggled();
-    m_inputNode->setVisible(m_transform.isVisible);
+    (m_currentSetting.get().*m_transform).isVisible = !btn->isToggled();
+    m_inputNode->setVisible((m_currentSetting.get().*m_transform).isVisible);
 }
 
 GEODE_NS_IV_END

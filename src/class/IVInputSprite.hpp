@@ -1,5 +1,6 @@
 #pragma once
 #include "IVBackgroundSprite.hpp"
+#include "IVLevelSettings.hpp"
 #include <IVEvent.hpp>
 
 #pragma GCC diagnostic push
@@ -16,14 +17,15 @@ enum class CPSCalculation {
 
 class InputSprite : public BackgroundSprite {
 public:
-    InputSprite();
-    static InputSprite* create(PlayerButton input, char const* playerText);
+    InputSprite(LevelSettings const& setting);
+    static InputSprite* create(LevelSettings const& setting, PlayerButton input, char const* playerText);
     bool init(PlayerButton input, char const* playerText);
 public:
     void press(bool pressed, bool updateInputs = true);
     void setShowTotalInputs(bool show);
     void setShowCPS(bool show);
     void setMinimal(bool minimal);
+    void setLevelSettings(LevelSettings const& settings);
     void updateButtonAppearance();
     void onSettingChange(SettingEventType type);
 public:
@@ -35,6 +37,7 @@ protected:
     void subtractCPS();
     void updateLabelWidth(cocos2d::CCLabelBMFont* font);
 protected:
+    std::reference_wrapper<LevelSettings const> m_currentSetting;
     bool m_shouldUpdateTotalInputsDisplay = false;
     bool m_shouldUpdateCPSDisplay = false;
     unsigned m_totalInputs = 0;

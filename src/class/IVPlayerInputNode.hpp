@@ -11,7 +11,7 @@ public:
     static PlayerInputNode* create(LevelSettings const& setting, char const* playerText);
     bool init(char const* playerText);
 public:
-    void handleButton(bool down, PlayerButton input, bool updateTotalInputs = true);
+    void handleButton(bool down, PlayerButton input, bool updateCounters = true);
     void refreshAppearance();
     void setShowTotalInputs(bool show);
     void setShowCPS(bool show);

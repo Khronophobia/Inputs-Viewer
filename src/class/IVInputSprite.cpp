@@ -80,12 +80,12 @@ bool InputSprite::init(PlayerButton input, char const* playerText) {
     return true;
 }
 
-void InputSprite::press(bool pressed, bool updateInputs) {
+void InputSprite::press(bool pressed, bool updateCounters) {
     if (pressed) {
         this->setBackgroundColor(IVManager::get().m_backgroundPressColor);
         this->setOutlineColor(IVManager::get().m_outlinePressColor);
         this->setTextColor(IVManager::get().m_textPressColor);
-        if (updateInputs) {
+        if (updateCounters) {
             ++m_totalInputs;
             m_shouldUpdateTotalInputsDisplay = true;
             ++m_clicksPerSecond;

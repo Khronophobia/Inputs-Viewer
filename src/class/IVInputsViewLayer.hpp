@@ -11,7 +11,10 @@ public:
     static InputsViewLayer* create(LevelSettingsType type);
     bool init() override;
 public:
+    void handleButton(bool down, PlayerButton input, bool isP1, bool updateCounters = true);
+    LevelSettings const& getLevelSettings() const noexcept;
     void setLevelSettings(LevelSettingsType type);
+    void releaseAllButtons();
     void refreshDisplay();
     void onSettingEvent(SettingEventType type);
 public:

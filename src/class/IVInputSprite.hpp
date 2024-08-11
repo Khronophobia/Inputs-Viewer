@@ -21,7 +21,7 @@ public:
     static InputSprite* create(LevelSettings const& setting, PlayerButton input, char const* playerText);
     bool init(PlayerButton input, char const* playerText);
 public:
-    void press(bool pressed, bool updateInputs = true);
+    void press(bool pressed, bool updateCounters = true);
     void setShowTotalInputs(bool show);
     void setShowCPS(bool show);
     void setMinimal(bool minimal);

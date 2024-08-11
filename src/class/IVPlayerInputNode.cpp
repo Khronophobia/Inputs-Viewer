@@ -46,14 +46,14 @@ bool PlayerInputNode::init(char const* playerText) {
     return true;
 }
 
-void PlayerInputNode::handleButton(bool down, PlayerButton input, bool updateTotalInputs) {
+void PlayerInputNode::handleButton(bool down, PlayerButton input, bool updateCounters) {
     switch (input) {
     case PlayerButton::Jump:
-        m_jumpButton->press(down, updateTotalInputs); break;
+        m_jumpButton->press(down, updateCounters); break;
     case PlayerButton::Left:
-        m_leftButton->press(down, updateTotalInputs); break;
+        m_leftButton->press(down, updateCounters); break;
     case PlayerButton::Right:
-        m_rightButton->press(down, updateTotalInputs); break;
+        m_rightButton->press(down, updateCounters); break;
     }
 }
 

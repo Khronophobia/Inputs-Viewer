@@ -31,12 +31,37 @@ bool InputsViewLayer::init() {
     return true;
 }
 
+void InputsViewLayer::handleButton(bool down, PlayerButton input, bool isP1, bool updateCounters) {
+    if (isP1) {
+        if (m_currentSetting.get().p1Transform.isVisible) {
+            m_p1InputNode->handleButton(down, input, updateCounters);
+        } else if (m_currentSetting.get().p2Transform.isVisible) {
+            m_p2InputNode->handleButton(down, input, updateCounters);
+        }
+    } else {
+        if (m_currentSetting.get().p2Transform.isVisible) {
+            m_p2InputNode->handleButton(down, input, updateCounters);
+        } else if (m_currentSetting.get().p1Transform.isVisible) {
+            m_p1InputNode->handleButton(down, input, updateCounters);
+        }
+    }
+}
+
+LevelSettings const& InputsViewLayer::getLevelSettings() const noexcept {
+    return m_currentSetting;
+}
+
 void InputsViewLayer::setLevelSettings(LevelSettingsType type) {
     m_currentSetting = IVManager::get().getLevelSettings(type);
     m_p1InputNode->setLevelSettings(IVManager::get().getLevelSettings(type));
     m_p2InputNode->setLevelSettings(IVManager::get().getLevelSettings(type));
 
     this->refreshDisplay();
+}
+
+void InputsViewLayer::releaseAllButtons() {
+    m_p1InputNode->releaseAllButtons();
+    m_p2InputNode->releaseAllButtons();
 }
 
 void InputsViewLayer::refreshDisplay() {

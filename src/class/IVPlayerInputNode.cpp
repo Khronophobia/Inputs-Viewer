@@ -37,10 +37,12 @@ bool PlayerInputNode::init(char const* playerText) {
     m_playerIndicator->setAnchorPoint(ccp(0.5f, 0.f));
     m_playerIndicator->setContentWidth(constants::buttonWidth);
     this->addChild(m_playerIndicator);
-    m_playerIndicatorText = CCLabelBMFont::create(playerText, "chatFont.fnt");
-    m_playerIndicatorText->setScale(0.75f);
-    m_playerIndicator->addTextNode(m_playerIndicatorText);
-    m_playerIndicator->addChildAtPosition(m_playerIndicatorText, Anchor::Center);
+    if (playerText) {
+        auto playerIndicatorText = CCLabelBMFont::create(playerText, "chatFont.fnt");
+        playerIndicatorText->setScale(0.75f);
+        m_playerIndicator->addTextNode(playerIndicatorText);
+        m_playerIndicator->addChildAtPosition(playerIndicatorText, Anchor::Center);
+    }
 
     this->refreshAppearance();
     return true;

@@ -53,8 +53,8 @@ LevelSettings const& InputsViewLayer::getLevelSettings() const noexcept {
 
 void InputsViewLayer::setLevelSettings(LevelSettingsType type) {
     m_currentSetting = IVManager::get().getLevelSettings(type);
-    m_p1InputNode->setLevelSettings(IVManager::get().getLevelSettings(type));
-    m_p2InputNode->setLevelSettings(IVManager::get().getLevelSettings(type));
+    m_p1InputNode->setLevelSettings(m_currentSetting);
+    m_p2InputNode->setLevelSettings(m_currentSetting);
 
     this->refreshDisplay();
 }

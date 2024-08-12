@@ -21,7 +21,6 @@ public:
     std::reference_wrapper<LevelSettings const> m_currentSetting;
     PlayerInputNode* m_p1InputNode = nullptr;
     PlayerInputNode* m_p2InputNode = nullptr;
-    GJBaseGameLayer* m_gameLayer = nullptr;
     geode::EventListener<IVSettingFilter> m_settingListener;
 };
 

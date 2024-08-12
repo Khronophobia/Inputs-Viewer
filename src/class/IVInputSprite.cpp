@@ -75,7 +75,6 @@ bool InputSprite::init(PlayerButton input, char const* playerText) {
     this->addTextNode(m_cpsText);
     this->addChildAtPosition(m_cpsText, Anchor::Bottom);
 
-    this->press(false, false);
     this->setContentWidth(constants::buttonWidth);
     return true;
 }

@@ -31,6 +31,7 @@ public:
 public:
     void visit() override;
 protected:
+    void updateCPSCounter();
     void updateTotalInputsDisplay();
     void updateCPSDisplay();
     void cpsSchedule(float dt);
@@ -42,7 +43,7 @@ protected:
     bool m_shouldUpdateCPSDisplay = false;
     unsigned m_totalInputs = 0;
     unsigned m_clicksPerSecond = 0;
-    unsigned m_displayedCPS;
+    unsigned m_displayedCPS = 0;
     CPSCalculation m_currentCPSCalculation;
     float m_textScale = 0.5f;
     cocos2d::CCSprite* m_inputSymbol = nullptr;

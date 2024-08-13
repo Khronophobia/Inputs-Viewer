@@ -79,6 +79,20 @@ bool InputSprite::init(PlayerButton input, char const* playerText) {
     return true;
 }
 
+void InputSprite::updateCPSCounter() {
+    ++m_clicksPerSecond;
+    if (m_currentCPSCalculation == CPSCalculation::RealTime) {
+        m_displayedCPS = m_clicksPerSecond;
+        this->runAction(
+            CCSequence::createWithTwoActions(
+                CCDelayTime::create(1.f),
+                CCCallFunc::create(this, callfunc_selector(InputSprite::subtractCPS)
+            ))
+        );
+        m_shouldUpdateCPSDisplay = true;
+    }
+}
+
 void InputSprite::press(bool pressed, bool updateCounters) {
     if (pressed) {
         this->setBackgroundColor(IVManager::get().m_backgroundPressColor);
@@ -87,17 +101,7 @@ void InputSprite::press(bool pressed, bool updateCounters) {
         if (updateCounters) {
             ++m_totalInputs;
             m_shouldUpdateTotalInputsDisplay = true;
-            ++m_clicksPerSecond;
-            if (m_currentCPSCalculation == CPSCalculation::RealTime && m_currentSetting.get().showCPS) {
-                m_displayedCPS = m_clicksPerSecond;
-                this->runAction(
-                    CCSequence::createWithTwoActions(
-                        CCDelayTime::create(1.f),
-                        CCCallFunc::create(this, callfunc_selector(InputSprite::subtractCPS)
-                    ))
-                );
-                m_shouldUpdateCPSDisplay = true;
-            }
+            if (m_currentSetting.get().showCPS) this->updateCPSCounter();
         }
     } else {
         this->setBackgroundColor(IVManager::get().m_backgroundReleaseColor);
@@ -125,8 +129,6 @@ void InputSprite::setShowTotalInputs(bool show) {
 void InputSprite::setShowCPS(bool show) {
     if (show) {
         m_cpsText->setVisible(true);
-        m_clicksPerSecond = 0;
-        m_displayedCPS = 0;
         if (m_currentCPSCalculation == CPSCalculation::PerSecond) {
             this->schedule(schedule_selector(InputSprite::cpsSchedule), 1.f);
         }
@@ -135,6 +137,8 @@ void InputSprite::setShowCPS(bool show) {
         m_cpsText->setVisible(false);
         this->stopAllActions();
         this->unschedule(schedule_selector(InputSprite::cpsSchedule));
+        m_clicksPerSecond = 0;
+        m_displayedCPS = 0;
     }
 }
 

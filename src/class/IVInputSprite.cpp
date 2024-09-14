@@ -23,14 +23,15 @@ static CPSCalculation convertCPSCalculation(std::string const& str) {
 
 InputSprite::InputSprite(LevelSettings const& setting)
     : m_currentSetting(setting)
-    , m_cpsSettingListener([this](std::string value) {
-        m_currentCPSCalculation = convertCPSCalculation(value);
+    , m_cpsSettingListener([this](std::shared_ptr<SettingV3> setting) {
+        using SettingType = SettingTypeForValueType<std::string>::SettingType;
+        m_currentCPSCalculation = convertCPSCalculation(std::static_pointer_cast<SettingType>(setting)->getValue());
         if (m_currentSetting.get().showCPS) {
             this->setShowCPS(false);
             this->setShowCPS(true);
         }
     },
-    GeodeSettingChangedFilter<std::string>(Mod::get()->getID(), "cps-calculation"))
+    SettingChangedFilterV3(Mod::get()->getID(), "cps-calculation"))
 {}
 
 InputSprite* InputSprite::create(LevelSettings const& setting, PlayerButton input, char const* playerText) {

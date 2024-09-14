@@ -11,11 +11,19 @@ using namespace geode::prelude;
     m_##__col##PressColor(Mod::get()->getSettingValue<ccColor4B>(#__col "-press-color")), \
     m_##__col##ReleaseColor(Mod::get()->getSettingValue<ccColor4B>(#__col "-release-color")), \
     m_##__col##PressListener( \
-        [this](auto color) { m_##__col##PressColor = color; IVSettingEvent(SettingEventType::Color).post(); }, \
+        [this](std::shared_ptr<SettingV3> setting) {\
+            using SettingType = SettingTypeForValueType<ccColor4B>::SettingType;\
+            m_##__col##PressColor = std::static_pointer_cast<SettingType>(setting)->getValue();\
+            IVSettingEvent(SettingEventType::Color).post();\
+        }, \
         RGBASettingFilter(Mod::get()->getID(), #__col "-press-color") \
     ), \
     m_##__col##ReleaseListener( \
-        [this](auto color) { m_##__col##ReleaseColor = color; IVSettingEvent(SettingEventType::Color).post(); }, \
+        [this](std::shared_ptr<SettingV3> setting) {\
+            using SettingType = SettingTypeForValueType<ccColor4B>::SettingType;\
+            m_##__col##ReleaseColor = std::static_pointer_cast<SettingType>(setting)->getValue();\
+            IVSettingEvent(SettingEventType::Color).post();\
+        }, \
         RGBASettingFilter(Mod::get()->getID(), #__col "-release-color") \
     ) \
 

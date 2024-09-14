@@ -1,14 +1,10 @@
 #pragma once
 #include "IVLevelSettings.hpp"
-
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-function"
-#include <Geode/loader/SettingEvent.hpp>
-#pragma GCC diagnostic pop
+#include <Geode/loader/SettingV3.hpp>
 
 GEODE_NS_IV_BEGIN
 
-using RGBASettingFilter = geode::GeodeSettingChangedFilter<cocos2d::ccColor4B>;
+using RGBASettingFilter = geode::SettingChangedFilterV3;
 using RGBASettingListener = geode::EventListener<RGBASettingFilter>;
 
 class IVManager {

@@ -2,11 +2,7 @@
 #include "IVBackgroundSprite.hpp"
 #include "IVLevelSettings.hpp"
 #include <IVEvent.hpp>
-
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-function"
-#include <Geode/loader/SettingEvent.hpp>
-#pragma GCC diagnostic pop
+#include <Geode/loader/SettingV3.hpp>
 
 GEODE_NS_IV_BEGIN
 
@@ -50,7 +46,7 @@ protected:
     cocos2d::CCLabelBMFont* m_playerText = nullptr;
     cocos2d::CCLabelBMFont* m_totalInputsText = nullptr;
     cocos2d::CCLabelBMFont* m_cpsText = nullptr;
-    geode::EventListener<geode::GeodeSettingChangedFilter<std::string>> m_cpsSettingListener;
+    geode::EventListener<geode::SettingChangedFilterV3> m_cpsSettingListener;
 };
 
 GEODE_NS_IV_END

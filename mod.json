@@ -35,6 +35,10 @@
 				"Per Second"
 			]
 		},
+		"appearance": {
+			"name": "Appearance",
+			"type": "title"
+		},
 		"background-press-color": {
 			"name": "Background Press Color",
 			"type": "rgba",

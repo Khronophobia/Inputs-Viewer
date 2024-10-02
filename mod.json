@@ -28,6 +28,10 @@
 		}
 	],
 	"settings": {
+		"category-logic": {
+			"name": "Logic",
+			"type": "title"
+		},
 		"cps-calculation": {
 			"name": "CPS Calculation",
 			"type": "string",
@@ -37,7 +41,7 @@
 				"Per Second"
 			]
 		},
-		"appearance": {
+		"category-appearance": {
 			"name": "Appearance",
 			"type": "title"
 		},

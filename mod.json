@@ -1,5 +1,5 @@
 {
-	"geode": "3.6.1",
+	"geode": "3.8.1",
 	"gd": {
 		"win": "2.206",
 		"mac": "2.206"
@@ -9,7 +9,9 @@
 	"version": "v1.2.0",
 	"developer": "Khronophobia",
 	"description": "Shows player inputs during gameplay.",
-	"repository": "https://github.com/Khronophobia/Inputs-Viewer",
+	"links": {
+		"source": "https://github.com/Khronophobia/Inputs-Viewer"
+	},
 	"tags": [
 		"interface"
 	],

@@ -19,8 +19,8 @@ void IVGJBaseGameLayer::resetLevelVariables() {
     ivLayer->releaseAllButtons();
 }
 
-void IVGJBaseGameLayer::loadLevelSettings() {
-    GJBaseGameLayer::loadLevelSettings();
+void IVGJBaseGameLayer::setupLevelStart(LevelSettingsObject* levelSettings) {
+    GJBaseGameLayer::setupLevelStart(levelSettings);
 
-    static_cast<IVUILayer*>(m_uiLayer)->setupInputsViewer();
+    static_cast<IVUILayer*>(m_uiLayer)->setupInputsViewer(levelSettings);
 }

@@ -6,5 +6,5 @@ struct IVGJBaseGameLayer : geode::Modify<IVGJBaseGameLayer, GJBaseGameLayer> {
     $override
     void resetLevelVariables();
     $override
-    void loadLevelSettings();
+    void setupLevelStart(LevelSettingsObject* levelSettings);
 };

@@ -6,5 +6,5 @@ struct IVUILayer : geode::Modify<IVUILayer, UILayer> {
         inputs_viewer::InputsViewLayer* m_ivLayer = nullptr;
     };
 
-    void setupInputsViewer();
+    void setupInputsViewer(LevelSettingsObject* levelSettings);
 };

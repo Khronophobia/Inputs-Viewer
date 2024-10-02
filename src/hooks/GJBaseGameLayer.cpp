@@ -14,13 +14,13 @@ void IVGJBaseGameLayer::handleButton(bool down, int button, bool isP1) {
 $override
 void IVGJBaseGameLayer::resetLevelVariables() {
     GJBaseGameLayer::resetLevelVariables();
-    auto ivLayer = static_cast<IVUILayer*>(m_uiLayer)->m_fields->m_ivLayer;
-
-    ivLayer->releaseAllButtons();
+    if (auto ivLayer = static_cast<IVUILayer*>(m_uiLayer)->m_fields->m_ivLayer) {
+        ivLayer->releaseAllButtons();
+    }
 }
 
 void IVGJBaseGameLayer::setupLevelStart(LevelSettingsObject* levelSettings) {
     GJBaseGameLayer::setupLevelStart(levelSettings);
 
-    static_cast<IVUILayer*>(m_uiLayer)->setupInputsViewer(levelSettings);
+    static_cast<IVUILayer*>(m_uiLayer)->setupInputsViewer(m_isPlatformer);
 }

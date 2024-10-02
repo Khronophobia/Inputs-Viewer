@@ -3,10 +3,10 @@
 
 using namespace geode::prelude;
 
-void IVUILayer::setupInputsViewer(LevelSettingsObject* levelSettings) {
+void IVUILayer::setupInputsViewer(bool isPlatformer) {
     if (m_fields->m_ivLayer) return;
 
-    if (levelSettings->m_platformerMode) {
+    if (isPlatformer) {
         m_fields->m_ivLayer = inputs_viewer::InputsViewLayer::create(inputs_viewer::LevelSettingsType::Platformer);
     } else {
         m_fields->m_ivLayer = inputs_viewer::InputsViewLayer::create(inputs_viewer::LevelSettingsType::Classic);

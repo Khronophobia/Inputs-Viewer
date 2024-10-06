@@ -189,7 +189,7 @@ void InputSprite::updateLabelWidth(CCLabelBMFont* font) {
     font->limitLabelWidth(16.f, m_textScale, 0.1f);
 }
 
-void InputSprite::cpsSchedule(float dt) {
+void InputSprite::cpsSchedule(float) {
     m_displayedCPS = m_clicksPerSecond;
     m_clicksPerSecond = 0;
     m_shouldUpdateCPSDisplay = true;

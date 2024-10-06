@@ -25,11 +25,7 @@ InputSprite::InputSprite(LevelSettings const& setting)
     : m_currentSetting(setting)
     , m_cpsSettingListener([this](std::shared_ptr<SettingV3> setting) {
         using SettingType = SettingTypeForValueType<std::string>::SettingType;
-        m_currentCPSCalculation = convertCPSCalculation(std::static_pointer_cast<SettingType>(setting)->getValue());
-        if (m_currentSetting.get().showCPS) {
-            this->setShowCPS(false);
-            this->setShowCPS(true);
-        }
+        this->setCPSMode(convertCPSCalculation(std::static_pointer_cast<SettingType>(setting)->getValue()));
     },
     SettingChangedFilterV3(Mod::get()->getID(), "cps-calculation"))
 {}
@@ -80,6 +76,22 @@ bool InputSprite::init(PlayerButton input, char const* playerText) {
     return true;
 }
 
+void InputSprite::setCPSMode(CPSCalculation mode) {
+    m_currentCPSCalculation = mode;
+    switch (m_currentCPSCalculation) {
+    case CPSCalculation::RealTime:
+        this->unschedule(schedule_selector(InputSprite::cpsSchedule));
+        break;
+    case CPSCalculation::PerSecond:
+        this->stopAllActions();
+        this->schedule(schedule_selector(InputSprite::cpsSchedule), 1.f);
+        break;
+    }
+    m_clicksPerSecond = 0;
+    m_displayedCPS = 0;
+    m_shouldUpdateCPSDisplay = true;
+}
+
 void InputSprite::updateCPSCounter() {
     ++m_clicksPerSecond;
     if (m_currentCPSCalculation == CPSCalculation::RealTime) {
@@ -102,7 +114,7 @@ void InputSprite::press(bool pressed, bool updateCounters) {
         if (updateCounters) {
             ++m_totalInputs;
             m_shouldUpdateTotalInputsDisplay = true;
-            if (m_currentSetting.get().showCPS) this->updateCPSCounter();
+            this->updateCPSCounter();
         }
     } else {
         this->setBackgroundColor(IVManager::get().m_backgroundReleaseColor);
@@ -121,7 +133,6 @@ void InputSprite::setMinimal(bool minimal) {
 void InputSprite::setShowTotalInputs(bool show) {
     if (show) {
         m_totalInputsText->setVisible(true);
-        m_shouldUpdateTotalInputsDisplay = true;
     } else {
         m_totalInputsText->setVisible(false);
     }
@@ -130,16 +141,8 @@ void InputSprite::setShowTotalInputs(bool show) {
 void InputSprite::setShowCPS(bool show) {
     if (show) {
         m_cpsText->setVisible(true);
-        if (m_currentCPSCalculation == CPSCalculation::PerSecond) {
-            this->schedule(schedule_selector(InputSprite::cpsSchedule), 1.f);
-        }
-        m_shouldUpdateCPSDisplay = true;
     } else {
         m_cpsText->setVisible(false);
-        this->stopAllActions();
-        this->unschedule(schedule_selector(InputSprite::cpsSchedule));
-        m_clicksPerSecond = 0;
-        m_displayedCPS = 0;
     }
 }
 
@@ -198,25 +201,21 @@ void InputSprite::subtractCPS() {
 }
 
 void InputSprite::updateTotalInputsDisplay() {
-    if (!m_totalInputsText->isVisible()) return;
-
     m_totalInputsText->setString(std::to_string(m_totalInputs).c_str());
     this->updateLabelWidth(m_totalInputsText);
 }
 
 void InputSprite::updateCPSDisplay() {
-    if (!m_cpsText->isVisible()) return;
-
     m_cpsText->setString(std::to_string(m_displayedCPS).c_str());
     this->updateLabelWidth(m_cpsText);
 }
 
 void InputSprite::visit() {
-    if (m_shouldUpdateTotalInputsDisplay) {
+    if (m_shouldUpdateTotalInputsDisplay && m_totalInputsText->isVisible()) {
         this->updateTotalInputsDisplay();
         m_shouldUpdateTotalInputsDisplay = false;
     }
-    if (m_shouldUpdateCPSDisplay) {
+    if (m_shouldUpdateCPSDisplay && m_cpsText->isVisible()) {
         this->updateCPSDisplay();
         m_shouldUpdateCPSDisplay = false;
     }

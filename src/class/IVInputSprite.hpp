@@ -19,6 +19,7 @@ public:
 public:
     void press(bool pressed, bool updateCounters = true);
     void setShowTotalInputs(bool show);
+    void setCPSMode(CPSCalculation mode);
     void setShowCPS(bool show);
     void setMinimal(bool minimal);
     void setLevelSettings(LevelSettings const& settings);

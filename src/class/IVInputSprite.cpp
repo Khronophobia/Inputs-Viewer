@@ -43,7 +43,7 @@ InputSprite* InputSprite::create(LevelSettings const& setting, PlayerButton inpu
 bool InputSprite::init(PlayerButton input, char const* playerText) {
     if (!BackgroundSprite::init()) return false;
     this->setAnchorPoint(ccp(0.5f, 0.f));
-    m_currentCPSCalculation = convertCPSCalculation(Mod::get()->getSettingValue<std::string>("cps-calculation"));
+    this->setCPSMode(convertCPSCalculation(Mod::get()->getSettingValue<std::string>("cps-calculation")));
 
     m_inputSymbol = CCSprite::create("symbol_arrow.png"_spr);
     this->addTextNode(m_inputSymbol);
@@ -73,6 +73,7 @@ bool InputSprite::init(PlayerButton input, char const* playerText) {
     this->addChildAtPosition(m_cpsText, Anchor::Bottom);
 
     this->setContentWidth(constants::buttonWidth);
+    this->scheduleUpdate();
     return true;
 }
 
@@ -188,7 +189,7 @@ void InputSprite::updateLabelWidth(CCLabelBMFont* font) {
     font->limitLabelWidth(16.f, m_textScale, 0.1f);
 }
 
-void InputSprite::cpsSchedule(float) {
+void InputSprite::cpsSchedule(float dt) {
     m_displayedCPS = m_clicksPerSecond;
     m_clicksPerSecond = 0;
     m_shouldUpdateCPSDisplay = true;

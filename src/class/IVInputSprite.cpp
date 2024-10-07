@@ -1,5 +1,6 @@
 #include "IVInputSprite.hpp"
 #include "IVManager.hpp"
+#include "IVPlayerInputNode.hpp"
 #include <IVUtils.hpp>
 #include <IVConstants.hpp>
 
@@ -21,18 +22,17 @@ static CPSCalculation convertCPSCalculation(std::string const& str) {
     return CPSCalculation::RealTime;
 }
 
-InputSprite::InputSprite(LevelSettings const& setting)
-    : m_currentSetting(setting)
-    , m_cpsSettingListener([this](std::shared_ptr<SettingV3> setting) {
+InputSprite::InputSprite()
+    : m_cpsSettingListener([this](std::shared_ptr<SettingV3> setting) {
         using SettingType = SettingTypeForValueType<std::string>::SettingType;
         this->setCPSMode(convertCPSCalculation(std::static_pointer_cast<SettingType>(setting)->getValue()));
     },
     SettingChangedFilterV3(Mod::get()->getID(), "cps-calculation"))
 {}
 
-InputSprite* InputSprite::create(LevelSettings const& setting, PlayerButton input, char const* playerText) {
-    auto ret = new (std::nothrow) InputSprite(setting);
-    if (ret && ret->init(input, playerText)) {
+InputSprite* InputSprite::create(PlayerInputNode* inputNode, PlayerButton button, char const* playerText) {
+    auto ret = new (std::nothrow) InputSprite;
+    if (ret && ret->init(inputNode, button, playerText)) {
         ret->autorelease();
         return ret;
     }
@@ -40,16 +40,17 @@ InputSprite* InputSprite::create(LevelSettings const& setting, PlayerButton inpu
     return nullptr;
 }
 
-bool InputSprite::init(PlayerButton input, char const* playerText) {
+bool InputSprite::init(PlayerInputNode* inputNode, PlayerButton button, char const* playerText) {
     if (!BackgroundSprite::init()) return false;
     this->setAnchorPoint(ccp(0.5f, 0.f));
     this->setCPSMode(convertCPSCalculation(Mod::get()->getSettingValue<std::string>("cps-calculation")));
+    m_inputNode = inputNode;
 
     m_inputSymbol = CCSprite::create("symbol_arrow.png"_spr);
     this->addTextNode(m_inputSymbol);
     this->addChildAtPosition(m_inputSymbol, Anchor::Top);
 
-    switch (input) {
+    switch (button) {
     case PlayerButton::Jump: break;
     case PlayerButton::Left:
         m_inputSymbol->setRotation(-90.f); break;
@@ -148,7 +149,7 @@ void InputSprite::setShowCPS(bool show) {
 }
 
 void InputSprite::updateButtonAppearance() {
-    if (m_currentSetting.get().showTotalInputs || m_currentSetting.get().showCPS) {
+    if (m_inputNode->getLevelSettings().showTotalInputs || m_inputNode->getLevelSettings().showCPS) {
         static_cast<AnchorLayoutOptions*>(m_inputSymbol->getLayoutOptions())
             ->setOffset(ccp(0.f, -7.5f));
         if (m_playerText) static_cast<AnchorLayoutOptions*>(m_playerText->getLayoutOptions())
@@ -162,13 +163,13 @@ void InputSprite::updateButtonAppearance() {
         this->setContentHeight(constants::buttonHeightNormal);
     }
 
-    if (m_currentSetting.get().showTotalInputs ^ m_currentSetting.get().showCPS) {
+    if (m_inputNode->getLevelSettings().showTotalInputs ^ m_inputNode->getLevelSettings().showCPS) {
         m_textScale = 0.55f;
         static_cast<AnchorLayoutOptions*>(m_totalInputsText->getLayoutOptions())
             ->setOffset(ccp(0.f, 8.f));
         static_cast<AnchorLayoutOptions*>(m_cpsText->getLayoutOptions())
             ->setOffset(ccp(0.f, 8.f));
-    } else if (m_currentSetting.get().showTotalInputs && m_currentSetting.get().showCPS) {
+    } else if (m_inputNode->getLevelSettings().showTotalInputs && m_inputNode->getLevelSettings().showCPS) {
         m_textScale = 0.45f;
         static_cast<AnchorLayoutOptions*>(m_totalInputsText->getLayoutOptions())
             ->setOffset(ccp(0.f, 11.5f));
@@ -179,10 +180,6 @@ void InputSprite::updateButtonAppearance() {
     this->updateLabelWidth(m_totalInputsText);
     this->updateLabelWidth(m_cpsText);
     m_shouldUpdateLayout = true;
-}
-
-void InputSprite::setLevelSettings(LevelSettings const& settings) {
-    m_currentSetting = settings;
 }
 
 void InputSprite::updateLabelWidth(CCLabelBMFont* font) {

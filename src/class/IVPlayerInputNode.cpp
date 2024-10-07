@@ -23,13 +23,13 @@ PlayerInputNode* PlayerInputNode::create(LevelSettings const& setting, char cons
 bool PlayerInputNode::init(char const* playerText) {
     if (!CCNode::init()) return false;
 
-    m_jumpButton = InputSprite::create(m_currentSetting, PlayerButton::Jump, playerText);
+    m_jumpButton = InputSprite::create(this, PlayerButton::Jump, playerText);
     m_jumpButton->setPositionY(20.5f);
     this->addChild(m_jumpButton);
-    m_leftButton = InputSprite::create(m_currentSetting, PlayerButton::Left, nullptr);
+    m_leftButton = InputSprite::create(this, PlayerButton::Left, nullptr);
     m_leftButton->setPositionX(-constants::buttonWidth - 0.25f);
     this->addChild(m_leftButton);
-    m_rightButton = InputSprite::create(m_currentSetting, PlayerButton::Right, nullptr);
+    m_rightButton = InputSprite::create(this, PlayerButton::Right, nullptr);
     m_rightButton->setPositionX(constants::buttonWidth + 0.25f);
     this->addChild(m_rightButton);
 
@@ -83,11 +83,12 @@ void PlayerInputNode::releaseAllButtons() {
 
 void PlayerInputNode::setLevelSettings(LevelSettings const& settings) {
     m_currentSetting = settings;
-    m_jumpButton->setLevelSettings(settings);
-    m_leftButton->setLevelSettings(settings);
-    m_rightButton->setLevelSettings(settings);
 
     this->refreshAppearance();
+}
+
+LevelSettings const& PlayerInputNode::getLevelSettings() const noexcept {
+    return m_currentSetting;
 }
 
 void PlayerInputNode::refreshAppearance() {

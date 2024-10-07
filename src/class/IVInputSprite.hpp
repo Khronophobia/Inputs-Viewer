@@ -1,6 +1,5 @@
 #pragma once
 #include "IVBackgroundSprite.hpp"
-#include "IVLevelSettings.hpp"
 #include <IVEvent.hpp>
 #include <Geode/loader/SettingV3.hpp>
 
@@ -11,18 +10,19 @@ enum class CPSCalculation {
     PerSecond,
 };
 
+class PlayerInputNode;
+
 class InputSprite : public BackgroundSprite {
 public:
-    InputSprite(LevelSettings const& setting);
-    static InputSprite* create(LevelSettings const& setting, PlayerButton input, char const* playerText);
-    bool init(PlayerButton input, char const* playerText);
+    InputSprite();
+    static InputSprite* create(PlayerInputNode* inputNode, PlayerButton button, char const* playerText);
+    bool init(PlayerInputNode* inputNode, PlayerButton button, char const* playerText);
 public:
     void press(bool pressed, bool updateCounters = true);
     void setShowTotalInputs(bool show);
     void setCPSMode(CPSCalculation mode);
     void setShowCPS(bool show);
     void setMinimal(bool minimal);
-    void setLevelSettings(LevelSettings const& settings);
     void updateButtonAppearance();
     void onSettingChange(SettingEventType type);
 public:
@@ -35,7 +35,7 @@ protected:
     void subtractCPS();
     void updateLabelWidth(cocos2d::CCLabelBMFont* font);
 protected:
-    std::reference_wrapper<LevelSettings const> m_currentSetting;
+    PlayerInputNode* m_inputNode = nullptr;
     bool m_shouldUpdateTotalInputsDisplay = false;
     bool m_shouldUpdateCPSDisplay = false;
     unsigned m_totalInputs = 0;

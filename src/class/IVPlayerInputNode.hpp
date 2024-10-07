@@ -17,6 +17,7 @@ public:
     void setShowCPS(bool show);
     void releaseAllButtons();
     void setLevelSettings(LevelSettings const& settings);
+    LevelSettings const& getLevelSettings() const noexcept;
 protected:
     bool isMinimalMode() const;
 protected:

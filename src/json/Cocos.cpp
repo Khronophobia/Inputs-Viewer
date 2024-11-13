@@ -4,85 +4,25 @@ using namespace geode::prelude;
 
 // CCPoint
 
-bool matjson::Serialize<CCPoint>::is_json(matjson::Value const& value) {
-    if (value.is_object()) {
-        return value.contains("x") && value.contains("y");
-    } else if (value.is_array()) {
-        return value.as_array().size() == 2;
-    }
-
-    return false;
+matjson::Value matjson::Serialize<CCPoint>::toJson(CCPoint const& value) {
+    return std::vector<matjson::Value>{value.x, value.y};
 }
 
-matjson::Value matjson::Serialize<CCPoint>::to_json(CCPoint const& value) {
-    return matjson::Object{
-        {"x", value.x},
-        {"y", value.y}
-    };
-}
-
-CCPoint matjson::Serialize<CCPoint>::from_json(matjson::Value const& value) {
-    if (value.is_object()) {
-        if (value.is<CCSize>()) return value.as<CCSize>();
-        else {
-            return {
-                static_cast<float>(value["x"].as_double()),
-                static_cast<float>(value["y"].as_double())
-            };
+geode::Result<cocos2d::CCPoint> matjson::Serialize<CCPoint>::fromJson(matjson::Value const& value) {
+    if (value.isObject()) {
+        if (value.contains("x") && value.contains("y")) {
+            auto x = GEODE_UNWRAP(value["x"].as<float>());
+            auto y = GEODE_UNWRAP(value["y"].as<float>());
+            return Ok(CCPoint{x, y});
         }
-    } else if (value.is_array()) {
-        if (value.as_array().size() != 2) throw matjson::JsonException("Expected array to have 2 elements");
+        return Err("Expected object to have \"x\" and \"y\" field");
+    } else if (value.isArray()) {
+        if (value.asArray().unwrap().size() < 2) return Err("Expected array to have 2 elements");
 
-        return {
-            static_cast<float>(value[0].as_double()),
-            static_cast<float>(value[1].as_double())
-        };
+        auto x = GEODE_UNWRAP(value[0].as<float>());
+        auto y = GEODE_UNWRAP(value[1].as<float>());
+        return Ok(CCPoint{x, y});
     }
 
-    throw matjson::JsonException("Expected json to be an object or array");
-}
-
-// CCSize
-
-bool matjson::Serialize<CCSize>::is_json(matjson::Value const& value) {
-    if (value.is_object()) {
-        return value.contains("width") && value.contains("height");
-    } else if (value.is_array()) {
-        return value.as_array().size() == 2;
-    }
-
-    return value.is_number();
-}
-
-matjson::Value matjson::Serialize<CCSize>::to_json(CCSize const& value) {
-    return matjson::Object{
-        {"width", value.width},
-        {"height", value.height}
-    };
-}
-
-CCSize matjson::Serialize<CCSize>::from_json(matjson::Value const& value) {
-    if (value.is_object()) {
-        if (value.is<CCPoint>()) return value.as<CCPoint>();
-        else {
-            return {
-                static_cast<float>(value["width"].as_double()),
-                static_cast<float>(value["height"].as_double())
-            };
-        }
-    } else if (value.is_array()) {
-        if (value.as_array().size() != 2) throw matjson::JsonException("Expected array to have 2 elements");
-
-        return {
-            static_cast<float>(value[0].as_double()),
-            static_cast<float>(value[1].as_double())
-        };
-    } else if (value.is_number()) {
-        return {
-            static_cast<float>(value.as_double()),
-            static_cast<float>(value.as_double())
-        };
-    }
-
-    throw matjson::JsonException("Expected json to be an object, array, or a number");
+    return Err("Expected json to be an object or an array");
 }

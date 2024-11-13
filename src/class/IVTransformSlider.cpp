@@ -8,7 +8,7 @@ GEODE_NS_IV_BEGIN
 TransformSlider::TransformSlider(LevelSettings& setting)
     : m_currentSetting(setting) {}
 
-TransformSlider* TransformSlider::create(LevelSettings& setting, NodeTransform LevelSettings::* transform, PlayerInputNode* inputNode, char const* text, MiniFunction<NodeTransform()>&& defaultPosFunc) {
+TransformSlider* TransformSlider::create(LevelSettings& setting, NodeTransform LevelSettings::* transform, PlayerInputNode* inputNode, char const* text, std::function<NodeTransform()>&& defaultPosFunc) {
     auto ret = new (std::nothrow) TransformSlider(setting);
     if (ret && ret->init(transform, inputNode, text, std::move(defaultPosFunc))) {
         ret->autorelease();
@@ -19,7 +19,7 @@ TransformSlider* TransformSlider::create(LevelSettings& setting, NodeTransform L
     return nullptr;
 }
 
-bool TransformSlider::init(NodeTransform LevelSettings::* transform, PlayerInputNode* inputNode, char const* text, MiniFunction<NodeTransform()>&& defaultPosFunc) {
+bool TransformSlider::init(NodeTransform LevelSettings::* transform, PlayerInputNode* inputNode, char const* text, std::function<NodeTransform()>&& defaultPosFunc) {
     m_transform = transform;
     m_inputNode = inputNode;
     m_defaultPosFunc = std::move(defaultPosFunc);

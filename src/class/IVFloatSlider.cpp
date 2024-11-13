@@ -4,7 +4,7 @@ using namespace geode::prelude;
 
 GEODE_NS_IV_BEGIN
 
-FloatSlider* FloatSlider::create(char const* text, float defaultValue, float min, float max, geode::utils::MiniFunction<Callback>&& callback) {
+FloatSlider* FloatSlider::create(char const* text, float defaultValue, float min, float max, std::function<Callback>&& callback) {
     auto ret = new (std::nothrow) FloatSlider;
     if (ret && ret->init(text, defaultValue, min, max, std::move(callback))) {
         ret->autorelease();
@@ -14,7 +14,7 @@ FloatSlider* FloatSlider::create(char const* text, float defaultValue, float min
     return nullptr;
 }
 
-bool FloatSlider::init(char const* text, float defaultValue, float min, float max, geode::utils::MiniFunction<Callback>&& callback) {
+bool FloatSlider::init(char const* text, float defaultValue, float min, float max, std::function<Callback>&& callback) {
     m_callback = std::move(callback);
     m_minValue = min;
     m_maxValue = max;

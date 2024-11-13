@@ -13,7 +13,6 @@ struct NodeTransform {
 
 template<>
 struct matjson::Serialize<NodeTransform> {
-    static matjson::Value to_json(NodeTransform const& value);
-    static NodeTransform from_json(matjson::Value const& value);
-    static bool is_json(matjson::Value const& value);
+    static matjson::Value toJson(NodeTransform const& value);
+    static geode::Result<NodeTransform> fromJson(matjson::Value const& value);
 };

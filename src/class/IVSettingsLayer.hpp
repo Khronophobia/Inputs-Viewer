@@ -19,7 +19,7 @@ protected:
     bool setup() override;
     void setLevelSettings(LevelSettingsType type);
     void updateSettingNodes();
-    CCMenuItemToggler* createCheckbox(bool LevelSettings::* member, char const* text, std::optional<SettingEventType> postEvent, cocos2d::Anchor anchor, cocos2d::CCPoint const& offset = {}, char const* description = nullptr);
+    CCMenuItemToggler* createCheckbox(bool LevelSettings::* member, char const* text, std::optional<SettingEventType> postEvent, geode::Anchor anchor, cocos2d::CCPoint const& offset = {}, char const* description = nullptr);
 protected:
     LevelSettingsType m_currentSettingType;
     std::reference_wrapper<LevelSettings> m_currentSetting;

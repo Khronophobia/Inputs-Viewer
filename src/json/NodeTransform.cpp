@@ -1,6 +1,5 @@
 #include "NodeTransform.hpp"
 #include "Cocos.hpp" // IWYU pragma: keep
-#include "helper.hpp"
 
 using namespace geode::prelude;
 
@@ -16,24 +15,18 @@ void NodeTransform::setValues(CCNode* node) {
     isVisible = node->isVisible();
 }
 
-bool matjson::Serialize<NodeTransform>::is_json(matjson::Value const& value) {
-    return verifyJsonObject<CCPoint>(value, "position") &&
-        verifyJsonObject<float>(value, "scale") &&
-        verifyJsonObject<bool>(value, "visible");
-}
-
-matjson::Value matjson::Serialize<NodeTransform>::to_json(NodeTransform const& value) {
-    return matjson::Object{
+matjson::Value matjson::Serialize<NodeTransform>::toJson(NodeTransform const& value) {
+    return matjson::makeObject({
         {"position", value.position},
         {"scale", value.scale},
         {"visible", value.isVisible}
-    };
+    });
 }
 
-NodeTransform matjson::Serialize<NodeTransform>::from_json(matjson::Value const& value) {
-    return {
-        .position = value["position"].as<CCPoint>(),
-        .scale = static_cast<float>(value["scale"].as_double()),
-        .isVisible = value["visible"].as_bool()
-    };
+Result<NodeTransform> matjson::Serialize<NodeTransform>::fromJson(matjson::Value const& value) {
+    return Ok(NodeTransform{
+        .position = GEODE_UNWRAP(value["position"].as<CCPoint>()),
+        .scale = GEODE_UNWRAP(value["scale"].as<float>()),
+        .isVisible = GEODE_UNWRAP(value["visible"].asBool())
+    });
 }

@@ -23,7 +23,7 @@ public:
     IVSettingFilter(SettingEventType type);
 public:
     using Callback = void(SettingEventType);
-    geode::ListenerResult handle(geode::utils::MiniFunction<Callback> func, IVSettingEvent* event);
+    geode::ListenerResult handle(std::function<Callback> func, IVSettingEvent* event);
 protected:
     std::optional<SettingEventType> m_type;
 };

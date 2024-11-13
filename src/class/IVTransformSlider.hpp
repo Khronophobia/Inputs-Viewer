@@ -10,8 +10,8 @@ struct LevelSettings;
 class TransformSlider : public cocos2d::CCNode {
 public:
     TransformSlider(LevelSettings& setting);
-    static TransformSlider* create(LevelSettings& setting, NodeTransform LevelSettings::* transform, PlayerInputNode* inputNode, char const* text, geode::utils::MiniFunction<NodeTransform()>&& defaultPosFunc);
-    bool init(NodeTransform LevelSettings::* transform, PlayerInputNode* inputNode, char const* text, geode::utils::MiniFunction<NodeTransform()>&& defaultPosFunc);
+    static TransformSlider* create(LevelSettings& setting, NodeTransform LevelSettings::* transform, PlayerInputNode* inputNode, char const* text, std::function<NodeTransform()>&& defaultPosFunc);
+    bool init(NodeTransform LevelSettings::* transform, PlayerInputNode* inputNode, char const* text, std::function<NodeTransform()>&& defaultPosFunc);
 public:
     void setLevelSettings(LevelSettingsType type);
     void onDefaultPosition(cocos2d::CCObject*);
@@ -28,7 +28,7 @@ protected:
     CCMenuItemToggler* m_visibilityCheckbox = nullptr;
     cocos2d::CCLabelBMFont* m_textLabel = nullptr;
     cocos2d::CCMenu* m_buttonMenu = nullptr;
-    geode::utils::MiniFunction<NodeTransform()> m_defaultPosFunc = nullptr;
+    std::function<NodeTransform()> m_defaultPosFunc = nullptr;
 };
 
 GEODE_NS_IV_END

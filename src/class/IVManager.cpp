@@ -1,6 +1,5 @@
 #include "IVManager.hpp"
 #include <IVEvent.hpp>
-#include <json/helper.hpp>
 
 // Initializer order doesn't matter here
 #pragma GCC diagnostic ignored "-Wreorder-ctor"
@@ -112,30 +111,22 @@ $on_mod(Loaded) {
 
 GEODE_NS_IV_END
 
-matjson::Value matjson::Serialize<inputs_viewer::LevelSettings>::to_json(inputs_viewer::LevelSettings const& value) {
-    return matjson::Object{
+matjson::Value matjson::Serialize<inputs_viewer::LevelSettings>::toJson(inputs_viewer::LevelSettings const& value) {
+    return matjson::makeObject({
         {"p1-display", value.p1Transform},
         {"p2-display", value.p2Transform},
         {"show-total-inputs", value.showTotalInputs},
         {"show-cps", value.showCPS},
         {"hide-left-right", value.hideLeftRight}
-    };
+    });
 }
 
-inputs_viewer::LevelSettings matjson::Serialize<inputs_viewer::LevelSettings>::from_json(matjson::Value const& value) {
-    return {
-        .p1Transform = value["p1-display"].as<NodeTransform>(),
-        .p2Transform = value["p2-display"].as<NodeTransform>(),
-        .showTotalInputs = value["show-total-inputs"].as_bool(),
-        .showCPS = value["show-cps"].as_bool(),
-        .hideLeftRight = value["hide-left-right"].as_bool()
-    };
-}
-
-bool matjson::Serialize<inputs_viewer::LevelSettings>::is_json(matjson::Value const& value) {
-    return verifyJsonObject<NodeTransform>(value, "p1-display") &&
-        verifyJsonObject<NodeTransform>(value, "p2-display") &&
-        verifyJsonObject<bool>(value, "show-total-inputs") &&
-        verifyJsonObject<bool>(value, "show-cps") &&
-        verifyJsonObject<bool>(value, "hide-left-right");
+Result<inputs_viewer::LevelSettings> matjson::Serialize<inputs_viewer::LevelSettings>::fromJson(matjson::Value const& value) {
+    return Ok(inputs_viewer::LevelSettings{
+        .p1Transform = GEODE_UNWRAP(value["p1-display"].as<NodeTransform>()),
+        .p2Transform = GEODE_UNWRAP(value["p2-display"].as<NodeTransform>()),
+        .showTotalInputs = GEODE_UNWRAP(value["show-total-inputs"].asBool()),
+        .showCPS = GEODE_UNWRAP(value["show-cps"].asBool()),
+        .hideLeftRight = GEODE_UNWRAP(value["hide-left-right"].asBool())
+    });
 }

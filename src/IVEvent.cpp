@@ -19,7 +19,7 @@ IVSettingFilter::IVSettingFilter(std::nullopt_t) : IVSettingFilter() {}
 IVSettingFilter::IVSettingFilter(SettingEventType type)
     : m_type(type) {}
 
-ListenerResult IVSettingFilter::handle(MiniFunction<IVSettingFilter::Callback> fn, IVSettingEvent* event) {
+ListenerResult IVSettingFilter::handle(std::function<IVSettingFilter::Callback> fn, IVSettingEvent* event) {
     if (m_type && m_type.value() != event->getType()) return ListenerResult::Propagate;
 
     fn(event->getType());

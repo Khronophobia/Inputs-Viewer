@@ -6,8 +6,8 @@ class FloatSlider : public cocos2d::CCNode {
 public:
     using Callback = void(FloatSlider*);
 public:
-    static FloatSlider* create(char const* text, float defaultValue, float min, float max, geode::utils::MiniFunction<Callback>&& callback);
-    bool init(char const* text, float defaultValue, float min, float max, geode::utils::MiniFunction<Callback>&& callback);
+    static FloatSlider* create(char const* text, float defaultValue, float min, float max, std::function<Callback>&& callback);
+    bool init(char const* text, float defaultValue, float min, float max, std::function<Callback>&& callback);
 public:
     void setValue(float value, bool clamp = true, bool triggerCallback = false);
     float getValue() const;
@@ -19,7 +19,7 @@ protected:
     float sliderValueToRangeValue(float value) const noexcept;
     float rangeValueToSliderValue(float value) const noexcept;
 protected:
-    geode::utils::MiniFunction<Callback> m_callback;
+    std::function<Callback> m_callback;
     float m_minValue;
     float m_maxValue;
     Slider* m_slider = nullptr;

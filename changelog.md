@@ -1,3 +1,7 @@
+# v1.2.2
+
+- Port to 2.2074
+
 # v1.2.1
 
 - Fixed a crash when entering a level without level data

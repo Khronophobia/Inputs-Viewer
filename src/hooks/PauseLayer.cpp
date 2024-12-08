@@ -7,6 +7,7 @@ struct IVPauseLayer : Modify<IVPauseLayer, PauseLayer> {
     $override
     void customSetup() {
         PauseLayer::customSetup();
+        if (!Mod::get()->getSettingValue<bool>("ui-setting-in-pause")) return;
 
         if (auto menu = getChildByID("right-button-menu")) {
             auto settingBtn = CCMenuItemSpriteExtra::create(
@@ -20,9 +21,9 @@ struct IVPauseLayer : Modify<IVPauseLayer, PauseLayer> {
     }
     void onIVSetting(CCObject*) {
         if (PlayLayer::get()->m_levelSettings->m_platformerMode) {
-            inputs_viewer::SettingsLayer::create(inputs_viewer::LevelSettingsType::Platformer)->show();
+            inputs_viewer::SettingsLayer::create(inputs_viewer::LevelSettingsType::Platformer, true)->show();
         } else {
-            inputs_viewer::SettingsLayer::create(inputs_viewer::LevelSettingsType::Classic)->show();
+            inputs_viewer::SettingsLayer::create(inputs_viewer::LevelSettingsType::Classic, true)->show();
         }
     }
 };

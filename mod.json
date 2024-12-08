@@ -28,6 +28,15 @@
 		}
 	],
 	"settings": {
+		"open-ui-setting": {
+			"name": "Open UI Settings",
+			"type": "custom:ui-setting-button"
+		},
+		"ui-setting-in-pause": {
+			"name": "UI Settings in Pause Menu",
+			"type": "bool",
+			"default": true
+		},
 		"category-logic": {
 			"name": "Logic",
 			"type": "title"

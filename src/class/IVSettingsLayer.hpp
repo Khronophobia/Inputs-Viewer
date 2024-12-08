@@ -5,10 +5,10 @@
 
 GEODE_NS_IV_BEGIN
 
-class SettingsLayer : public geode::Popup<> {
+class SettingsLayer : public geode::Popup<bool> {
 public:
     SettingsLayer(LevelSettingsType settingType);
-    static SettingsLayer* create(LevelSettingsType);
+    static SettingsLayer* create(LevelSettingsType, bool enableGeodeSettingButton);
 public:
     void onModSettings(cocos2d::CCObject*);
     void onClassic(cocos2d::CCObject*);
@@ -16,7 +16,7 @@ public:
 public:
     void onExit() override;
 protected:
-    bool setup() override;
+    bool setup(bool enableGeodeSettingButton) override;
     void setLevelSettings(LevelSettingsType type);
     void updateSettingNodes();
     CCMenuItemToggler* createCheckbox(bool LevelSettings::* member, char const* text, std::optional<SettingEventType> postEvent, geode::Anchor anchor, cocos2d::CCPoint const& offset = {}, char const* description = nullptr);

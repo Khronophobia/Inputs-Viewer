@@ -19,6 +19,7 @@ add_library(${PROJECT_NAME} SHARED
     src/class/IVFloatSlider.cpp
     src/class/IVTransformSlider.cpp
     src/class/IVInputsViewLayer.cpp
+    src/class/geode_setting/IVUISettingsButton.cpp
     src/hooks/GJBaseGameLayer.cpp
     src/hooks/PlayLayer.cpp
     src/hooks/PauseLayer.cpp

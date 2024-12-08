@@ -12,9 +12,9 @@ SettingsLayer::SettingsLayer(LevelSettingsType levelType)
     , m_currentSetting(IVManager::get().getLevelSettings(levelType))
 {}
 
-SettingsLayer* SettingsLayer::create(LevelSettingsType levelType) {
+SettingsLayer* SettingsLayer::create(LevelSettingsType levelType, bool enableGeodeSettingButton) {
     auto ret = new (std::nothrow) SettingsLayer(levelType);
-    if (ret && ret->initAnchored(350.f, 260.f, "square02_001.png")) {
+    if (ret && ret->initAnchored(350.f, 260.f, enableGeodeSettingButton, "square02_001.png")) {
         ret->autorelease();
         return ret;
     }
@@ -22,7 +22,7 @@ SettingsLayer* SettingsLayer::create(LevelSettingsType levelType) {
     return nullptr;
 }
 
-bool SettingsLayer::setup() {
+bool SettingsLayer::setup(bool enableGeodeSettingButton) {
     IVManager::get().m_isInSetting = true;
     this->setTitle("Inputs Viewer Config");
     this->setColor({127, 127, 127});
@@ -30,11 +30,13 @@ bool SettingsLayer::setup() {
     m_noElasticity = true;
     m_bgSprite->setOpacity(63);
 
-    auto modSettingsBtn = CCMenuItemSpriteExtra::create(
-        CCSprite::createWithSpriteFrameName("GJ_optionsBtn02_001.png"),
-        this, menu_selector(SettingsLayer::onModSettings)
-    );
-    m_buttonMenu->addChildAtPosition(modSettingsBtn, Anchor::TopRight, ccp(-3.f, -3.f));
+    if (enableGeodeSettingButton) {
+        auto modSettingsBtn = CCMenuItemSpriteExtra::create(
+            CCSprite::createWithSpriteFrameName("GJ_optionsBtn02_001.png"),
+            this, menu_selector(SettingsLayer::onModSettings)
+        );
+        m_buttonMenu->addChildAtPosition(modSettingsBtn, Anchor::TopRight, ccp(-3.f, -3.f));
+    }
 
     auto classicBtnSpr = ButtonSprite::create("Classic", "bigFont.fnt", "GJ_button_04.png");
     classicBtnSpr->setScale(0.5f);

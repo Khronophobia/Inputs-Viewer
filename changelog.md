@@ -1,3 +1,8 @@
+# v1.3.0
+
+- You can now access display settings in the mod 
+- Add a setting to disable the button in the pause menu
+
 # v1.2.2
 
 - Port to 2.2074

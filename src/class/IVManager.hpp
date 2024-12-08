@@ -15,6 +15,7 @@ public:
     static NodeTransform getDefaultP2Transform();
     LevelSettings& getLevelSettings(LevelSettingsType type) noexcept;
 public:
+    bool m_isInSetting;
     cocos2d::ccColor4B m_backgroundPressColor;
     cocos2d::ccColor4B m_backgroundReleaseColor;
     cocos2d::ccColor4B m_outlinePressColor;

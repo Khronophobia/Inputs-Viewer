@@ -23,6 +23,7 @@ SettingsLayer* SettingsLayer::create(LevelSettingsType levelType) {
 }
 
 bool SettingsLayer::setup() {
+    IVManager::get().m_isInSetting = true;
     this->setTitle("Inputs Viewer Config");
     this->setColor({127, 127, 127});
     this->setOpacity(255);
@@ -142,6 +143,7 @@ void SettingsLayer::onModSettings(CCObject*) {
 }
 
 void SettingsLayer::onExit() {
+    IVManager::get().m_isInSetting = false;
     IVSettingEvent(SettingEventType::RefreshView).post();
     Popup::onExit();
 }

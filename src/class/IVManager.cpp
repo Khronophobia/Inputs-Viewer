@@ -29,7 +29,8 @@ using namespace geode::prelude;
 GEODE_NS_IV_BEGIN
 
 IVManager::IVManager()
-    : GEODE_IV_CONSTRUCT_COLOR(background)
+    : m_isInSetting(false)
+    , GEODE_IV_CONSTRUCT_COLOR(background)
     , GEODE_IV_CONSTRUCT_COLOR(outline)
     , GEODE_IV_CONSTRUCT_COLOR(text)
     , m_settingClassic(

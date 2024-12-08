@@ -141,7 +141,7 @@ CCMenuItemToggler* SettingsLayer::createCheckbox(bool LevelSettings::* member, c
 }
 
 void SettingsLayer::onModSettings(CCObject*) {
-    openSettingsPopup(Mod::get());
+    openSettingsPopup(Mod::get(), false);
 }
 
 void SettingsLayer::onExit() {

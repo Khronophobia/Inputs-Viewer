@@ -1,5 +1,5 @@
 {
-	"geode": "4.0.1",
+	"geode": "4.2.0",
 	"gd": {
 		"win": "2.2074",
 		"mac": "2.2074"
@@ -20,13 +20,12 @@
 			"resources/*.png"
 		]
 	},
-	"dependencies": [
-		{
-			"id": "geode.node-ids",
+	"dependencies": {
+		"geode.node-ids": {
 			"version": ">=1.12.0",
 			"importance": "required"
 		}
-	],
+	},
 	"settings": {
 		"open-ui-setting": {
 			"name": "Open Display Settings",

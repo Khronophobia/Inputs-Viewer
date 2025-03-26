@@ -1,3 +1,7 @@
+# v1.3.1
+
+- Android version from someone's request
+
 # v1.3.0
 
 - You can now access display settings in the mod 

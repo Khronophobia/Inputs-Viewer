@@ -7,7 +7,7 @@
 	},
 	"id": "khronophobia.inputs_viewer",
 	"name": "Inputs Viewer",
-	"version": "v1.3.0",
+	"version": "v1.3.1",
 	"developer": "Khronophobia",
 	"description": "Shows player inputs during gameplay.",
 	"links": {

@@ -2,7 +2,8 @@
 	"geode": "4.2.0",
 	"gd": {
 		"win": "2.2074",
-		"mac": "2.2074"
+		"mac": "2.2074",
+		"android": "2.2074"
 	},
 	"id": "khronophobia.inputs_viewer",
 	"name": "Inputs Viewer",

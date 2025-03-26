@@ -1,7 +1,6 @@
 #include "IVInputSprite.hpp"
 #include "IVManager.hpp"
 #include "IVPlayerInputNode.hpp"
-#include <IVUtils.hpp>
 #include <IVConstants.hpp>
 
 using namespace geode::prelude;

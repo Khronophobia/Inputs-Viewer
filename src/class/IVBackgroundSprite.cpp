@@ -1,6 +1,5 @@
 #include "IVBackgroundSprite.hpp"
 #include "IVManager.hpp"
-#include <IVUtils.hpp>
 
 using namespace geode::prelude;
 
@@ -89,21 +88,21 @@ void BackgroundSprite::setTextColor(ccColor4B const& color) {
 
 void BackgroundSprite::addBackgroundNode(CCNode* node) {
     if (auto protocol = typeinfo_cast<CCRGBAProtocol*>(node)) {
-        utils::setColor4(protocol, m_backgroundColor);
+        protocol->setColor(m_backgroundColor);
         m_backgroundColorNodes.push_back(node);
     }
 }
 
 void BackgroundSprite::addOutlineNode(CCNode* node) {
     if (auto protocol = typeinfo_cast<CCRGBAProtocol*>(node)) {
-        utils::setColor4(protocol, m_outlineColor);
+        protocol->setColor(m_outlineColor);
         m_outlineColorNodes.push_back(node);
     }
 }
 
 void BackgroundSprite::addTextNode(CCNode* node) {
     if (auto protocol = typeinfo_cast<CCRGBAProtocol*>(node)) {
-        utils::setColor4(protocol, m_textColor);
+        protocol->setColor(m_textColor);
         m_textColorNodes.push_back(node);
     }
 }
@@ -125,7 +124,7 @@ void BackgroundSprite::updateBackgroundColorNodes() {
 
     for (auto node : m_backgroundColorNodes) {
         if (auto protocol = typeinfo_cast<CCRGBAProtocol*>(node)) {
-            utils::setColor4(protocol, m_backgroundColor);
+            protocol->setColor(m_backgroundColor);
         }
     }
 }
@@ -135,7 +134,7 @@ void BackgroundSprite::updateOutlineColorNodes() {
 
     for (auto node : m_outlineColorNodes) {
         if (auto protocol = typeinfo_cast<CCRGBAProtocol*>(node)) {
-            utils::setColor4(protocol, m_outlineColor);
+            protocol->setColor(m_outlineColor);
         }
     }
 }
@@ -145,7 +144,7 @@ void BackgroundSprite::updateTextColorNodes() {
 
     for (auto node : m_textColorNodes) {
         if (auto protocol = typeinfo_cast<CCRGBAProtocol*>(node)) {
-            utils::setColor4(protocol, m_textColor);
+            protocol->setColor(m_textColor);
         }
     }
 }

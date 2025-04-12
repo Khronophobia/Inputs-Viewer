@@ -18,6 +18,10 @@ jobs:
         - name: macOS
           os: macos-latest
 
+        - name: iOS
+          os: macos-latest
+          target: iOS
+
         - name: Android32
           os: ubuntu-latest
           target: Android32
@@ -32,15 +36,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Build the mod
+      - name: Build the mod (Release)
         uses: geode-sdk/build-geode-mod@main
         with:
-          export-pdb: true
-          build-config: RelWithDebInfo
-          bindings: geode-sdk/bindings
-          bindings-ref: main
+          # build-config: RelWithDebInfo
+          # export-pdb: true
+          # bindings: RayDeeUx/bindings
+          # bindings-ref: "foobar"
           combine: true
           target: ${{ matrix.config.target }}
+          cli: nightly # remove once iOS finishes
+          sdk: nightly # remove once iOS finishes
 
   package:
     name: Package builds
@@ -50,6 +56,8 @@ jobs:
     steps:
       - uses: geode-sdk/build-geode-mod/combine@main
         id: build
+        with:
+          cli: nightly # remove once iOS finishes
 
       - uses: actions/upload-artifact@v4
         with:

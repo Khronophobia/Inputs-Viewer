@@ -8,24 +8,9 @@ enum class SettingEventType {
     RefreshView,
 };
 
-class IVSettingEvent : public geode::Event {
+class IVSettingEvent : public geode::Event<IVSettingEvent, bool(), SettingEventType> {
 public:
-    IVSettingEvent(SettingEventType type);
-    SettingEventType getType() const noexcept;
-protected:
-    SettingEventType m_type;
-};
-
-class IVSettingFilter : public geode::EventFilter<IVSettingEvent> {
-public:
-    IVSettingFilter();
-    IVSettingFilter(std::nullopt_t);
-    IVSettingFilter(SettingEventType type);
-public:
-    using Callback = void(SettingEventType);
-    geode::ListenerResult handle(std::function<Callback> func, IVSettingEvent* event);
-protected:
-    std::optional<SettingEventType> m_type;
+    using Event::Event;
 };
 
 GEODE_NS_IV_END

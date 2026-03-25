@@ -26,7 +26,7 @@ protected:
     InputSprite* m_leftButton = nullptr;
     InputSprite* m_rightButton = nullptr;
     BackgroundSprite* m_playerIndicator = nullptr;
-    geode::EventListener<IVSettingFilter> m_settingListener;
+    geode::comm::ListenerHandle m_settingListener;
 };
 
 GEODE_NS_IV_END

@@ -22,11 +22,14 @@ static CPSCalculation convertCPSCalculation(std::string const& str) {
 }
 
 InputSprite::InputSprite()
-    : m_cpsSettingListener([this](std::shared_ptr<SettingV3> setting) {
-        using SettingType = SettingTypeForValueType<std::string>::SettingType;
-        this->setCPSMode(convertCPSCalculation(std::static_pointer_cast<SettingType>(setting)->getValue()));
-    },
-    SettingChangedFilterV3(Mod::get()->getID(), "cps-calculation"))
+    : m_cpsSettingListener(
+        SettingChangedEventV3(Mod::get()->getID(), "cps-calculation").listen(
+            [this](std::shared_ptr<SettingV3> setting) {
+                using SettingType = SettingTypeForValueType<std::string>::SettingType;
+                this->setCPSMode(convertCPSCalculation(std::static_pointer_cast<SettingType>(setting)->getValue()));
+            }
+        )
+    )
 {}
 
 InputSprite* InputSprite::create(PlayerInputNode* inputNode, PlayerButton button, char const* playerText) {

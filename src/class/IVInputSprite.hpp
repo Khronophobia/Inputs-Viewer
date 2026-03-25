@@ -47,7 +47,7 @@ protected:
     cocos2d::CCLabelBMFont* m_playerText = nullptr;
     cocos2d::CCLabelBMFont* m_totalInputsText = nullptr;
     cocos2d::CCLabelBMFont* m_cpsText = nullptr;
-    geode::EventListener<geode::SettingChangedFilterV3> m_cpsSettingListener;
+    geode::comm::ListenerHandle m_cpsSettingListener;
 };
 
 GEODE_NS_IV_END

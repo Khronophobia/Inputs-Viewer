@@ -7,7 +7,7 @@ GEODE_NS_IV_BEGIN
 
 PlayerInputNode::PlayerInputNode(LevelSettings const& setting)
     : m_currentSetting(setting)
-    , m_settingListener([this](auto) { this->refreshAppearance(); }, IVSettingFilter(SettingEventType::KeyAppearance)) {}
+    , m_settingListener(IVSettingEvent(SettingEventType::KeyAppearance).listen([this]() { this->refreshAppearance(); })) {}
 
 PlayerInputNode* PlayerInputNode::create(LevelSettings const& setting, char const* playerText) {
     auto ret = new (std::nothrow) PlayerInputNode(setting);

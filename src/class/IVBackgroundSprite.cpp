@@ -10,11 +10,13 @@ BackgroundSprite::BackgroundSprite(ccColor4B const& backgroundColor, ccColor4B c
     , m_outlineColor(outlineColor)
     , m_textColor(textColor)
     , m_colorListener(
-        [this](auto) {
-            this->updateBackgroundColorNodes();
-            this->updateOutlineColorNodes();
-            this->updateTextColorNodes();
-        }, IVSettingFilter(SettingEventType::Color)
+        IVSettingEvent(SettingEventType::Color).listen(
+            [this] {
+                this->updateBackgroundColorNodes();
+                this->updateOutlineColorNodes();
+                this->updateTextColorNodes();
+            }
+        )
     )
 {}
 

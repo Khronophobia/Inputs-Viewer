@@ -45,7 +45,7 @@ protected:
     geode::cocos::CCArrayExt<cocos2d::CCNode*> m_backgroundColorNodes;
     geode::cocos::CCArrayExt<cocos2d::CCNode*> m_outlineColorNodes;
     geode::cocos::CCArrayExt<cocos2d::CCNode*> m_textColorNodes;
-    geode::EventListener<IVSettingFilter> m_colorListener;
+    geode::comm::ListenerHandle m_colorListener;
 };
 
 GEODE_NS_IV_END

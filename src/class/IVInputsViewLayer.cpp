@@ -7,7 +7,7 @@ GEODE_NS_IV_BEGIN
 
 InputsViewLayer::InputsViewLayer(LevelSettingsType type)
     : m_currentSetting(IVManager::get().getLevelSettings(type))
-    , m_settingListener(this, &InputsViewLayer::onSettingEvent, IVSettingFilter(SettingEventType::RefreshView)) {}
+    , m_settingListener(IVSettingEvent(SettingEventType::RefreshView).listen([this] { this->onSettingEvent(); })) {}
 
 InputsViewLayer* InputsViewLayer::create(LevelSettingsType type) {
     auto ret = new (std::nothrow) InputsViewLayer(type);
@@ -69,7 +69,7 @@ void InputsViewLayer::refreshDisplay() {
     m_currentSetting.get().p2Transform.applyTransform(m_p2InputNode);
 }
 
-void InputsViewLayer::onSettingEvent(SettingEventType) {
+void InputsViewLayer::onSettingEvent() {
     this->refreshDisplay();
 }
 

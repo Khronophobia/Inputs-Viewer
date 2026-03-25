@@ -1,13 +1,13 @@
 {
-	"geode": "4.3.1",
+	"geode": "5.4.1",
 	"gd": {
-		"win": "2.2074",
-		"mac": "2.2074",
-		"android": "2.2074"
+		"win": "2.2081",
+		"mac": "2.2081",
+		"android": "2.2081"
 	},
 	"id": "khronophobia.inputs_viewer",
 	"name": "Inputs Viewer",
-	"version": "v1.3.1",
+	"version": "v1.4.0",
 	"developer": "Khronophobia",
 	"description": "Shows player inputs during gameplay.",
 	"links": {
@@ -22,10 +22,7 @@
 		]
 	},
 	"dependencies": {
-		"geode.node-ids": {
-			"version": ">=1.12.0",
-			"importance": "required"
-		}
+		"geode.node-ids": ">=1.22.0"
 	},
 	"settings": {
 		"open-ui-setting": {

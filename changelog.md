@@ -1,3 +1,8 @@
+# v1.4.0
+
+- Added a "Reset 'Total Inputs' on Each Attempt" setting
+- Adjusted CPS calculation so that it accounts for TimeWarp triggers
+
 # v1.3.2
 
 - Ported to 2.2081

@@ -1,4 +1,5 @@
 #include "GJBaseGameLayer.hpp"
+#include "IVEvent.hpp"
 
 using namespace geode::prelude;
 
@@ -17,6 +18,7 @@ void IVGJBaseGameLayer::resetLevelVariables() {
     }
 }
 
+$override
 void IVGJBaseGameLayer::setupLevelStart(LevelSettingsObject* levelSettings) {
     GJBaseGameLayer::setupLevelStart(levelSettings);
     if (m_fields->m_ivLayer) return;
@@ -28,4 +30,18 @@ void IVGJBaseGameLayer::setupLevelStart(LevelSettingsObject* levelSettings) {
     }
     m_fields->m_ivLayer->setPosition(CCDirector::get()->getWinSize() * 0.5f);
     m_uiLayer->addChild(m_fields->m_ivLayer);
+}
+
+/*
+    I would have used `GJBaseGameLayer::updateTimeWarp, which only gets called when the TimeWarp itself changes instead of being called every frame`,
+    but it doesn't work properly when you die and the level restarts
+*/
+$override
+void IVGJBaseGameLayer::applyTimeWarp(float timeWarp) {
+    GJBaseGameLayer::applyTimeWarp(timeWarp);
+    if (m_fields->m_currentTimeWarp != timeWarp) {
+        m_fields->m_currentTimeWarp = timeWarp;
+        inputs_viewer::TimeWarpEvent().send(timeWarp);
+        geode::log::debug("updated timewarp to {}", timeWarp);
+    }
 }

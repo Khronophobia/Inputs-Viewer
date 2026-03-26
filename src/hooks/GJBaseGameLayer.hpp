@@ -4,6 +4,7 @@
 struct IVGJBaseGameLayer : geode::Modify<IVGJBaseGameLayer, GJBaseGameLayer> {
     struct Fields {
         inputs_viewer::InputsViewLayer* m_ivLayer = nullptr;
+        float m_currentTimeWarp = 1.f;
     };
 
     $override
@@ -12,4 +13,6 @@ struct IVGJBaseGameLayer : geode::Modify<IVGJBaseGameLayer, GJBaseGameLayer> {
     void resetLevelVariables();
     $override
     void setupLevelStart(LevelSettingsObject* levelSettings);
+    $override
+    void applyTimeWarp(float timeWarp);
 };

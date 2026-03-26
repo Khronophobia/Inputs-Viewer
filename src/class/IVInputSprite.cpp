@@ -30,6 +30,7 @@ InputSprite::InputSprite()
             }
         )
     )
+    , m_timeWarpListener(TimeWarpEvent().listen(std::bind_front(&InputSprite::onTimeWarpChange, this)))
 {}
 
 InputSprite* InputSprite::create(PlayerInputNode* inputNode, PlayerButton button, char const* playerText) {
@@ -88,7 +89,7 @@ void InputSprite::setCPSMode(CPSCalculation mode) {
         break;
     case CPSCalculation::PerSecond:
         this->stopAllActions();
-        this->schedule(schedule_selector(InputSprite::cpsSchedule), 1.f);
+        this->schedule(schedule_selector(InputSprite::cpsSchedule), m_timeScale);
         break;
     }
     m_clicksPerSecond = 0;
@@ -102,7 +103,7 @@ void InputSprite::updateCPSCounter() {
         m_displayedCPS = m_clicksPerSecond;
         this->runAction(
             CCSequence::createWithTwoActions(
-                CCDelayTime::create(1.f),
+                CCDelayTime::create(m_timeScale),
                 CCCallFunc::create(this, callfunc_selector(InputSprite::subtractCPS)
             ))
         );
@@ -220,6 +221,14 @@ void InputSprite::visit() {
         m_shouldUpdateCPSDisplay = false;
     }
     BackgroundSprite::visit();
+}
+
+void InputSprite::onTimeWarpChange(float timeScale) {
+    m_timeScale = timeScale;
+    if (m_currentCPSCalculation == CPSCalculation::PerSecond) {
+        this->unschedule(schedule_selector(InputSprite::cpsSchedule));
+        this->schedule(schedule_selector(InputSprite::cpsSchedule), m_timeScale);
+    }
 }
 
 GEODE_NS_IV_END

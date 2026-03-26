@@ -34,6 +34,7 @@ protected:
     void cpsSchedule(float dt);
     void subtractCPS();
     void updateLabelWidth(cocos2d::CCLabelBMFont* font);
+    void onTimeWarpChange(float timeScale);
 protected:
     PlayerInputNode* m_inputNode = nullptr;
     bool m_shouldUpdateTotalInputsDisplay = false;
@@ -43,11 +44,13 @@ protected:
     unsigned m_displayedCPS = 0;
     CPSCalculation m_currentCPSCalculation;
     float m_textScale = 0.5f;
+    float m_timeScale = 1.f;
     cocos2d::CCSprite* m_inputSymbol = nullptr;
     cocos2d::CCLabelBMFont* m_playerText = nullptr;
     cocos2d::CCLabelBMFont* m_totalInputsText = nullptr;
     cocos2d::CCLabelBMFont* m_cpsText = nullptr;
     geode::comm::ListenerHandle m_cpsSettingListener;
+    geode::comm::ListenerHandle m_timeWarpListener;
 };
 
 GEODE_NS_IV_END

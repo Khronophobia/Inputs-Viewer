@@ -15,10 +15,16 @@ namespace CPSCalculationString {
 }
 
 static CPSCalculation convertCPSCalculation(std::string const& str) {
-    if (str == CPSCalculationString::RealTime) return CPSCalculation::RealTime;
-    else if (str == CPSCalculationString::PerSecond) return CPSCalculation::PerSecond;
-
-    return CPSCalculation::RealTime;
+    if (str == CPSCalculationString::RealTime) {
+        return CPSCalculation::RealTime;
+    }
+    else if (str == CPSCalculationString::PerSecond) {
+        return CPSCalculation::PerSecond;
+    }
+    else {
+        log::warn("cannot parse the Geode setting 'CPS Calculation'. Using 'Real-Time' instead");
+        return CPSCalculation::RealTime;
+    }
 }
 
 InputSprite::InputSprite()

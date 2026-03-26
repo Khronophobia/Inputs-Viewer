@@ -7,7 +7,6 @@ set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 project(InputsViewer VERSION 1.0.0)
 
 add_library(${PROJECT_NAME} SHARED
-    src/IVEvent.cpp
     src/json/Cocos.cpp
     src/json/NodeTransform.cpp
     src/class/IVManager.cpp

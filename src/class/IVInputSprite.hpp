@@ -24,6 +24,7 @@ public:
     void setShowCPS(bool show);
     void setMinimal(bool minimal);
     void updateButtonAppearance();
+    void resetTotalInputs();
     void onSettingChange(SettingEventType type);
 public:
     void visit() override;

@@ -16,6 +16,7 @@ public:
     void setLevelSettings(LevelSettingsType type);
     void releaseAllButtons();
     void refreshDisplay();
+    void resetTotalInputs();
     void onSettingEvent();
 public:
     std::reference_wrapper<LevelSettings const> m_currentSetting;

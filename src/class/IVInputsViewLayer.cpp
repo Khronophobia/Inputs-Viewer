@@ -69,6 +69,11 @@ void InputsViewLayer::refreshDisplay() {
     m_currentSetting.get().p2Transform.applyTransform(m_p2InputNode);
 }
 
+void InputsViewLayer::resetTotalInputs() {
+    m_p1InputNode->resetTotalInputs();
+    m_p2InputNode->resetTotalInputs();
+}
+
 void InputsViewLayer::onSettingEvent() {
     this->refreshDisplay();
 }

@@ -47,6 +47,11 @@
 				"Per Second"
 			]
 		},
+		"reset-inputs-per-attempt": {
+			"name": "Reset 'Total Inputs' on Each Attempt",
+			"type": "bool",
+			"default": false
+		},
 		"category-appearance": {
 			"name": "Appearance",
 			"type": "title"

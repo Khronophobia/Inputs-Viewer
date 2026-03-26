@@ -17,6 +17,7 @@ public:
     void setShowCPS(bool show);
     void releaseAllButtons();
     void setLevelSettings(LevelSettings const& settings);
+    void resetTotalInputs();
     LevelSettings const& getLevelSettings() const noexcept;
 protected:
     bool isMinimalMode() const;

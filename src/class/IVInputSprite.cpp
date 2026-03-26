@@ -217,6 +217,11 @@ void InputSprite::updateCPSDisplay() {
     this->updateLabelWidth(m_cpsText);
 }
 
+void InputSprite::resetTotalInputs() {
+    m_totalInputs = 0;
+    m_shouldUpdateTotalInputsDisplay = true;
+}
+
 void InputSprite::visit() {
     if (m_shouldUpdateTotalInputsDisplay && m_totalInputsText->isVisible()) {
         this->updateTotalInputsDisplay();

@@ -15,6 +15,9 @@ void IVGJBaseGameLayer::resetLevelVariables() {
     GJBaseGameLayer::resetLevelVariables();
     if (m_fields->m_ivLayer) {
         m_fields->m_ivLayer->releaseAllButtons();
+        if (Mod::get()->getSettingValue<bool>("reset-inputs-per-attempt")) {
+            m_fields->m_ivLayer->resetTotalInputs();
+        }
     }
 }
 

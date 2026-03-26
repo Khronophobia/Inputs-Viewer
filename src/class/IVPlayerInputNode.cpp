@@ -120,4 +120,10 @@ void PlayerInputNode::refreshAppearance() {
     m_rightButton->updateButtonAppearance();
 }
 
+void PlayerInputNode::resetTotalInputs() {
+    m_jumpButton->resetTotalInputs();
+    m_leftButton->resetTotalInputs();
+    m_rightButton->resetTotalInputs();
+}
+
 GEODE_NS_IV_END

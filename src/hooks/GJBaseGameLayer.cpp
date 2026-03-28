@@ -4,13 +4,6 @@
 using namespace geode::prelude;
 
 $override
-void IVGJBaseGameLayer::handleButton(bool down, int button, bool isP1) {
-    GJBaseGameLayer::handleButton(down, button, isP1);
-
-    m_fields->m_ivLayer->handleButton(down, static_cast<PlayerButton>(button), isP1);
-}
-
-$override
 void IVGJBaseGameLayer::resetLevelVariables() {
     GJBaseGameLayer::resetLevelVariables();
     if (m_fields->m_ivLayer) {

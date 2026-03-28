@@ -21,6 +21,7 @@ add_library(${PROJECT_NAME} SHARED
     src/hooks/GJBaseGameLayer.cpp
     src/hooks/PlayLayer.cpp
     src/hooks/PauseLayer.cpp
+    src/hooks/PlayerObject.cpp
 )
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")

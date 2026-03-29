@@ -6,7 +6,7 @@ using namespace geode::prelude;
 struct PlayerObjectHook : Modify<PlayerObjectHook, PlayerObject> {
     bool pushButton(PlayerButton button) {
         auto result = PlayerObject::pushButton(button);
-        auto gameLayer = static_cast<IVGJBaseGameLayer*>(GJBaseGameLayer::get());
+        auto gameLayer = static_cast<GJBaseGameLayerHook*>(GJBaseGameLayer::get());
         if (!gameLayer) return result;
         if (!gameLayer->m_fields->m_ivLayer) return result;
 
@@ -20,7 +20,7 @@ struct PlayerObjectHook : Modify<PlayerObjectHook, PlayerObject> {
     }
     bool releaseButton(PlayerButton button) {
         auto result = PlayerObject::releaseButton(button);
-        auto gameLayer = static_cast<IVGJBaseGameLayer*>(GJBaseGameLayer::get());
+        auto gameLayer = static_cast<GJBaseGameLayerHook*>(GJBaseGameLayer::get());
         if (!gameLayer) return result;
         if (!gameLayer->m_fields->m_ivLayer) return result;
 

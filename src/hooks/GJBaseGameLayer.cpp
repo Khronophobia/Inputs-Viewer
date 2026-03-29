@@ -4,7 +4,7 @@
 using namespace geode::prelude;
 
 $override
-void IVGJBaseGameLayer::resetLevelVariables() {
+void GJBaseGameLayerHook::resetLevelVariables() {
     GJBaseGameLayer::resetLevelVariables();
     if (m_fields->m_ivLayer) {
         m_fields->m_ivLayer->releaseAllButtons();
@@ -15,7 +15,7 @@ void IVGJBaseGameLayer::resetLevelVariables() {
 }
 
 $override
-void IVGJBaseGameLayer::setupLevelStart(LevelSettingsObject* levelSettings) {
+void GJBaseGameLayerHook::setupLevelStart(LevelSettingsObject* levelSettings) {
     GJBaseGameLayer::setupLevelStart(levelSettings);
     if (m_fields->m_ivLayer) return;
 
@@ -33,7 +33,7 @@ void IVGJBaseGameLayer::setupLevelStart(LevelSettingsObject* levelSettings) {
     but it doesn't work properly when you die and the level restarts
 */
 $override
-void IVGJBaseGameLayer::applyTimeWarp(float timeWarp) {
+void GJBaseGameLayerHook::applyTimeWarp(float timeWarp) {
     GJBaseGameLayer::applyTimeWarp(timeWarp);
     if (m_fields->m_currentTimeWarp != timeWarp) {
         m_fields->m_currentTimeWarp = timeWarp;

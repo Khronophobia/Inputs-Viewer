@@ -3,7 +3,7 @@
 
 using namespace geode::prelude;
 
-struct IVPauseLayer : Modify<IVPauseLayer, PauseLayer> {
+struct PauseLayerHook : Modify<PauseLayerHook, PauseLayer> {
     $override
     void customSetup() {
         PauseLayer::customSetup();
@@ -12,7 +12,7 @@ struct IVPauseLayer : Modify<IVPauseLayer, PauseLayer> {
         if (auto menu = getChildByID("right-button-menu")) {
             auto settingBtn = CCMenuItemSpriteExtra::create(
                 CircleButtonSprite::createWithSprite("settingsIcon.png"_spr, 1.f, CircleBaseColor::Green, CircleBaseSize::Tiny),
-                this, menu_selector(IVPauseLayer::onIVSetting)
+                this, menu_selector(PauseLayerHook::onIVSetting)
             );
             menu->addChild(settingBtn);
 

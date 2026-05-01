@@ -1,3 +1,7 @@
+# v1.4.1
+
+- Changed how inputs are detected
+
 # v1.4.0
 
 - Added a "Reset 'Total Inputs' on Each Attempt" setting
